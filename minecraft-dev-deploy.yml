@@ -1,0 +1,32 @@
+template-file-path: cf.yml
+parameters:
+  RecordName: dev.weenyhut.com
+  Timezone: ''
+  LevelType: DEFAULT
+  Difficulty: normal
+  Memory: 3G
+  EntryPoint: ''
+  ViewDistance: '-1'
+  SpotPrice: '0.05'
+  MaxPlayers: '-1'
+  ContainerInsights: disabled
+  YourIPv4: ''
+  MinecraftTypeTag: FABRIC
+  YourIPv6: ''
+  LogGroupName: ''
+  InstanceType: t3.medium
+  ECSAMI: /aws/service/ecs/optimized-ami/amazon-linux-2/recommended/image_id
+  AdminPlayerNames: Hodgeka91
+  KeyPairName: minecraft
+  ServerState: Running
+  HostedZoneId: Z0384235218U1Q4GBW6HZ
+  MinecraftImageTag: latest
+  LogStreamPrefix: minecraft-server
+  GameMode: survival
+  Command: ''
+  Seed: '4482410790499076715'
+  EnableRollingLogs: 'false'
+  Whitelist: Hodgeka91,trashkw33n,jollyjerr
+  LogGroupRetentionInDays: '7'
+  MinecraftVersion: 1.20.1
+tags: {}
