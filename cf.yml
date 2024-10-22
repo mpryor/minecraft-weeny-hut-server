@@ -478,7 +478,7 @@ Resources:
           unzip awscliv2.zip
           sudo ./aws/install
           aws s3 cp s3://weenyhut/.profile ~/.profile
-          echo "INSTANCE_ID=$(ec2-metadata | grep -i instance-id | awk '{print $2}')" >> ~/.profile
+          echo "INSTANCE_ID=$(ec2-metadata | grep -i instance-id | awk '{print $2}' | head -1)" >> ~/.profile
           echo "ECS_CLUSTER=${AWS::StackName}-cluster" >> ~/.profile
           echo "AUTOSCALING_GROUP=${AWS::StackName}-asg" >> ~/.profile
           echo "ECS_SERVICE=${AWS::StackName}-ecs-service" >> ~/.profile
