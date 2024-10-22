@@ -477,7 +477,11 @@ Resources:
           curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
           unzip awscliv2.zip
           sudo ./aws/install
-
+          aws s3 cp s3://weenyhut/.profile ~/.profile
+          sudo curl -o /usr/local/bin/autoshutdown https://raw.githubusercontent.com/mpryor/minecraft-weeny-hut-server/refs/heads/master/scripts/autoshutdown
+          sudo chmod +x /usr/local/bin/autoshutdown
+          echo "* * * * * source ~/.profile; /usr/local/bin/autoshutdown" | sudo crontab -
+          
   AutoScalingGroup:
     Type: AWS::AutoScaling::AutoScalingGroup
     DependsOn:
