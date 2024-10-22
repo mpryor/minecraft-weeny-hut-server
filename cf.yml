@@ -470,10 +470,13 @@ Resources:
         Fn::Base64: !Sub |
           #!/bin/bash -xe
           echo ECS_CLUSTER=${EcsCluster} >> /etc/ecs/ecs.config
-          yum install -y amazon-efs-utils
+          yum install -y amazon-efs-utils unzip
           mkdir /opt/minecraft
           mount -t efs ${Efs}:/ /opt/minecraft
           chown 845:845 /opt/minecraft
+          curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+          unzip awscliv2.zip
+          sudo ./aws/install
 
   AutoScalingGroup:
     Type: AWS::AutoScaling::AutoScalingGroup
