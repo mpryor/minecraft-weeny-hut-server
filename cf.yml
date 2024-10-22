@@ -176,9 +176,9 @@ Parameters:
     Default: ""
     
   ModrinthProjects:
-    Type: List<String>
+    Type: String
     Description: "List of modrinth project names that will be retrieved at startup, and installed."
-    Default: []
+    Default: ""
 
 Metadata:
   AWS::CloudFormation::Interface:
@@ -311,7 +311,7 @@ Conditions:
   EnableRollingLogsProvided: !Not [ !Equals [ !Ref EnableRollingLogs, '' ] ]
   TimezoneProvided: !Not [ !Equals [ !Ref Timezone, '' ] ]
   ModsProvided: !Not [ !Equals [ !Ref Mods, '' ] ]
-  ModrinthProjectsProvided: !Not [ !Equals [ !Ref ModrinthProjects, [] ] ]
+  ModrinthProjectsProvided: !Not [ !Equals [ !Ref ModrinthProjects, '' ] ]
 
 
 Mappings:
@@ -676,7 +676,7 @@ Resources:
             - !If
               - ModrinthProjectsProvided
               - Name: "MODRINTH_PROJECTS"
-                Value: !Join [",", ModrinthProjects]
+                Value: !Sub "${ModrinthProjects}"
               - !Ref 'AWS::NoValue'
   CloudWatchLogGroup:
     Condition: LogGroupNameProvided
