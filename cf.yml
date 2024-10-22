@@ -480,7 +480,6 @@ Resources:
           aws s3 cp s3://weenyhut/.profile ~/.profile
           echo "INSTANCE_ID=$(ec2-metadata | grep -i instance-id | awk '{print $2}')" >> ~/.profile
           echo "ECS_CLUSTER=${EcsCluster}" >> ~/.profile
-          echo "AUTOSCALING_GROUP=${AutoScalingGroup}" >> ~/.profile
           echo "ECS_SERVICE=${EcsService}" >> ~/.profile
           sudo curl -o /usr/local/bin/autoshutdown https://raw.githubusercontent.com/mpryor/minecraft-weeny-hut-server/refs/heads/master/scripts/autoshutdown
           sudo chmod +x /usr/local/bin/autoshutdown
