@@ -170,6 +170,10 @@ Parameters:
     Type: String
     Description: "Change the server's timezone. Use the canonical name of the format: Area/Location (e.g. America/New_York)"
 
+  Mods:
+    Type: String
+    Description: "A comma delimited list of mod jars that will be retrieved at startup, and installed."
+
 Metadata:
   AWS::CloudFormation::Interface:
     ParameterGroups:
@@ -300,6 +304,7 @@ Conditions:
   LevelTypeProvided: !Not [ !Equals [ !Ref LevelType, '' ] ]
   EnableRollingLogsProvided: !Not [ !Equals [ !Ref EnableRollingLogs, '' ] ]
   TimezoneProvided: !Not [ !Equals [ !Ref Timezone, '' ] ]
+  ModsProvided: !Not [ !Equals [ !Ref Mods, '' ] ]
 
 
 Mappings:
@@ -656,7 +661,11 @@ Resources:
               - Name: "TZ"
                 Value: !Sub "${Timezone}"
               - !Ref 'AWS::NoValue'
-
+            - !If
+              - ModsProvided
+              - Name: "MODS"
+                Value: !Sub "${Mods}"
+              - !Ref 'AWS::NoValue'
   CloudWatchLogGroup:
     Condition: LogGroupNameProvided
     Type: AWS::Logs::LogGroup
