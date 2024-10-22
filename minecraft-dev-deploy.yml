@@ -30,6 +30,6 @@ parameters:
   LogGroupRetentionInDays: '7'
   MinecraftVersion: 1.20.1
   ModrinthProjects: |
-    fabric-api
-    comforts
+    fabric-api # Required for many mods
+    comforts # Hammocks and sleeping bags
 tags: {}
