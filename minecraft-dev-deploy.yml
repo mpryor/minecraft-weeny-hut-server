@@ -29,7 +29,5 @@ parameters:
   Whitelist: Hodgeka91,trashkw33n,jollyjerr
   LogGroupRetentionInDays: '7'
   MinecraftVersion: 1.20.1
-  ModrinthProjects:
-  - fabric-api
-  - comforts
+  ModrinthProjects: "fabric-api,comforts"
 tags: {}
