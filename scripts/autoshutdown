@@ -1,0 +1,9 @@
+#!/bin/bash
+
+MINECRAFT_ID=$(docker ps | grep -i minecraft | awk '{print $1}')
+docker exec -it $MINECRAFT_ID rcon-cli list | awk '{print $3}' >> /tmp/player-count
+NO_RUNS=$(cat /tmp/player-count | tail -20 | grep -i 0 | wc -l)
+if [[ $NO_RUNS -gt 19 ]]; then
+         curl -X POST -H "Content-Type: application/json" -H "Authorization: Bot ${DISCORD_TOKEN}" "https://discord.com/api/v10/channels/${CHANNEL_ID}/messages" -d '{"content": "Players have been logged off for 20 minutes, shutting down the server..."}'
+fi
+sleep 1;
