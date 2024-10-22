@@ -173,6 +173,7 @@ Parameters:
   Mods:
     Type: String
     Description: "A comma delimited list of mod jars that will be retrieved at startup, and installed."
+    Default: ""
 
 Metadata:
   AWS::CloudFormation::Interface:
