@@ -29,7 +29,5 @@ parameters:
   Whitelist: Hodgeka91,trashkw33n,jollyjerr
   LogGroupRetentionInDays: '7'
   MinecraftVersion: 1.20.1
-  Mods: """
-  https://cdn.modrinth.com/data/SaCpeal4/versions/pMr60Kkq/comforts-fabric-6.4.0%2B1.20.1.jar
-  """
+  Mods: "https://cdn.modrinth.com/data/SaCpeal4/versions/pMr60Kkq/comforts-fabric-6.4.0%2B1.20.1.jar"
 tags: {}
