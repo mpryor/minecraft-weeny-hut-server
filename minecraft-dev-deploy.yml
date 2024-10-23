@@ -38,6 +38,7 @@ parameters:
     ash-api
     balm
     carry-on
+    cloth-config
     clumps
     cristel-lib
     collective
@@ -67,4 +68,15 @@ parameters:
     what-are-they-up-to
     xp-storage
     xp-storage-trinkets
+    yungs-api
+    yungs-better-desert-temples
+    yungs-better-dungeons
+    yungs-better-end-island
+    yungs-better-jungle-temples
+    yungs-better-mineshafts
+    yungs-better-nether-fortresses
+    yungs-better-ocean-monuments
+    yungs-better-strongholds
+    yungs-better-witch-huts
+    yungs-bridges
 tags: {}
