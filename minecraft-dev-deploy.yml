@@ -35,13 +35,35 @@ parameters:
     animal_feeding_trough
     appleskin
     architectury-api
+    balm
     carry-on
     clumps
-    collective
+    cristel-lib
+    collective    
     comforts
+    coroutil
     death-finder
     deeperdarker
     double-doors
-    owo-lib
+    fallingtree
+    fabric-language-kotlin
+    ferrite-core
+    flourish
+    ledger
+    lithium
+    lmft
+    memoryleakfix
+    modernfix
+    open-parties-and-claims
+    owo-lib    
     puzzles-lib
+    sleep
+    towns-and-towers
+    trinkets
+    universal-graves
+    unloaded-activity
+    waystones    
+    what-are-they-up-to
+    xp-storage
+    xp-storage-trinkets
 tags: {}
