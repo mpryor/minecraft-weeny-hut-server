@@ -31,5 +31,6 @@ parameters:
   MinecraftVersion: 1.20.1
   ModrinthProjects: |
     fabric-api
+    animal_feeding_trough
     comforts
 tags: {}
