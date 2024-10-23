@@ -479,6 +479,7 @@ Resources:
           sudo ./aws/install
           aws s3 cp s3://weenyhut/.profile ~/.profile
           echo "export INSTANCE_ID=$(ec2-metadata | grep -i instance-id | awk '{print $2}' | head -1)" >> ~/.profile
+          echo "export STACK_NAME=${AWS:StackName}" >> ~/.profile
           echo "export ECS_CLUSTER=${AWS::StackName}-cluster" >> ~/.profile
           echo "export AUTOSCALING_GROUP=${AWS::StackName}-asg" >> ~/.profile
           echo "export ECS_SERVICE=${AWS::StackName}-ecs-service" >> ~/.profile
