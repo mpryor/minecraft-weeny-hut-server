@@ -484,7 +484,7 @@ Resources:
           echo "export ECS_SERVICE=${AWS::StackName}-ecs-service" >> ~/.profile
           sudo curl -o /usr/local/bin/autoshutdown https://raw.githubusercontent.com/mpryor/minecraft-weeny-hut-server/refs/heads/master/scripts/autoshutdown
           sudo chmod +x /usr/local/bin/autoshutdown
-          echo "* * * * * source ~/.profile; /usr/local/bin/autoshutdown" | sudo crontab -
+          echo "* * * * * source ~/.profile; /usr/local/bin/autoshutdown >> /var/log/autoshutdown 2>&1" | sudo crontab -
           
   AutoScalingGroup:
     Type: AWS::AutoScaling::AutoScalingGroup
