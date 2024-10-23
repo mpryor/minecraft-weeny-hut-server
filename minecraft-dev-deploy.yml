@@ -32,6 +32,7 @@ parameters:
   ModrinthProjects: |
     fabric-api
     animal_feeding_trough
+    appleskin
     architectury-api
     comforts
 tags: {}
