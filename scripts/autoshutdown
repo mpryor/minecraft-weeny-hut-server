@@ -1,6 +1,15 @@
 #!/bin/bash
 
 MINECRAFT_ID=$(docker ps | grep -i minecraft | awk '{print $1}')
+
+if [ ! -f /tmp/serverstarted ]; then
+    docker logs $MINECRAFT_ID | grep -i "RCON running" >/dev/null
+    if [ $? -eq 0 ]; then
+        curl -X POST -H "Content-Type: application/json" -H "Authorization: Bot ${DISCORD_TOKEN}" "https://discord.com/api/v10/channels/${CHANNEL_ID}/messages" -d "{\"content\": \"Server: ${STACK_NAME} is now running!\"}"
+        touch /tmp/serverstarted
+    fi
+fi
+
 docker exec $MINECRAFT_ID rcon-cli list | awk '{print $3}' >> /tmp/player-count
 NO_RUNS=$(cat /tmp/player-count | tail -20 | grep -i 0 | wc -l)
 if [[ $NO_RUNS -gt 19 ]]; then
