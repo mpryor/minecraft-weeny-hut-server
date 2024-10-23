@@ -3,6 +3,9 @@ parameters:
   RecordName: dev.weenyhut.com
   Timezone: ''
   LevelType: DEFAULT
+  ModrinthProjects: |-
+    fabric-api
+    comforts
   Difficulty: normal
   Memory: 3G
   EntryPoint: ''
@@ -24,14 +27,10 @@ parameters:
   LogStreamPrefix: minecraft-server
   GameMode: survival
   Command: ''
+  Mods: ''
   Seed: '4482410790499076715'
   EnableRollingLogs: 'false'
   Whitelist: Hodgeka91,trashkw33n,jollyjerr
   LogGroupRetentionInDays: '7'
   MinecraftVersion: 1.20.1
-  ModrinthProjects: |
-    fabric-api
-    animal_feeding_trough
-    architectury
-    comforts
 tags: {}
