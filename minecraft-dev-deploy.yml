@@ -54,7 +54,7 @@ parameters:
     lmft
     memoryleakfix
     modernfix
-    open-parties-and-claims
+    open-parties-and-claims:beta
     owo-lib
     puzzles-lib
     sleep
