@@ -31,8 +31,17 @@ parameters:
   MinecraftVersion: 1.20.1
   ModrinthProjects: |
     fabric-api
+    forge-config-api-port
     animal_feeding_trough
     appleskin
     architectury-api
+    carry-on
+    clumps
+    collective
     comforts
+    death-finder
+    deeperdarker
+    double-doors
+    owo-lib
+    puzzles-lib
 tags: {}
