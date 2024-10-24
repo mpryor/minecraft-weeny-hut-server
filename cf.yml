@@ -180,6 +180,11 @@ Parameters:
     Description: "List of modrinth project names that will be retrieved at startup, and installed."
     Default: ""
 
+  S3ProfileName:
+    Type: String
+    Description: "The name of the secure profile to fetch from S3"
+    Default: ""
+
 Metadata:
   AWS::CloudFormation::Interface:
     ParameterGroups:
@@ -312,6 +317,7 @@ Conditions:
   TimezoneProvided: !Not [ !Equals [ !Ref Timezone, '' ] ]
   ModsProvided: !Not [ !Equals [ !Ref Mods, '' ] ]
   ModrinthProjectsProvided: !Not [ !Equals [ !Ref ModrinthProjects, '' ] ]
+  S3ProfileNameProvider: !Not [ !Equals [ !Ref S3ProfileName, '' ] ]
 
 
 Mappings:
@@ -477,7 +483,7 @@ Resources:
           curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
           unzip awscliv2.zip
           sudo ./aws/install
-          aws s3 cp s3://weenyhut/.profile ~/.profile
+          aws s3 cp "s3://weenyhut/${S3ProfileName}" ~/.profile
           echo "export INSTANCE_ID=$(ec2-metadata | grep -i instance-id | awk '{print $2}' | head -1)" >> ~/.profile
           echo "export STACK_NAME=${AWS::StackName}" >> ~/.profile
           echo "export ECS_CLUSTER=${AWS::StackName}-cluster" >> ~/.profile
