@@ -466,6 +466,10 @@ Resources:
         ToPort: 25565
         IpProtocol: tcp
         CidrIp: 0.0.0.0/0
+      - FromPort: 8123
+        ToPort: 8123
+        IpProtocol: tcp
+        CidrIp: 0.0.0.0/0
       VpcId: !Ref Vpc
 
   LaunchConfiguration:
@@ -610,6 +614,9 @@ Resources:
           PortMappings:
           - ContainerPort: 25565
             HostPort: 25565
+            Protocol: tcp
+          - ContainerPort: 8123
+            HostPort: 8123
             Protocol: tcp
           LogConfiguration:
             !If
