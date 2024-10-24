@@ -30,6 +30,7 @@ parameters:
   LogGroupRetentionInDays: '7'
   MinecraftVersion: 1.20.1
   S3ProfileName: .profile-prod
+  DiscordChannelId: 1298372122812612714
   ModrinthProjects: |
     fabric-api
     forge-config-api-port
