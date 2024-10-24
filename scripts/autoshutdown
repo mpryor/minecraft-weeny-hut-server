@@ -11,8 +11,8 @@ if [ ! -f /tmp/serverstarted ]; then
 fi
 
 docker exec $MINECRAFT_ID rcon-cli list | awk '{print $3}' >> /tmp/player-count
-NO_RUNS=$(cat /tmp/player-count | tail -20 | grep -i 0 | wc -l)
-if [[ $NO_RUNS -gt 19 ]]; then
+NO_RUNS=$(cat /tmp/player-count | tail -$MAX_MINUTES_IDLE | grep -i 0 | wc -l)
+if [[ $NO_RUNS -gt $(($MAX_MINUTES_IDLE - 1)) ]]; then
     curl -X POST -H "Content-Type: application/json" -H "Authorization: Bot ${DISCORD_TOKEN}" "https://discord.com/api/v10/channels/${CHANNEL_ID}/messages" -d "{\"content\": \"Players have been logged off for 20 minutes, the server: ${STACK_NAME} is shutting down. Use `/mcstart ${STACK_NAME}` to start the server back up!\"}"
     /usr/local/bin/aws autoscaling set-instance-protection --instance-id $INSTANCE_ID --auto-scaling-group-name $AUTOSCALING_GROUP --no-protected-from-scale-in
     /usr/local/bin/aws ecs update-service --cluster $ECS_CLUSTER --service $ECS_SERVICE  --desired-count 0
