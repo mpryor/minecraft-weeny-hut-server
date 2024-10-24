@@ -185,6 +185,11 @@ Parameters:
     Description: "The name of the secure profile to fetch from S3"
     Default: ""
 
+  DiscordChannelId:
+    Type: String
+    Description: "The id of the discord channel used by the autoshutdown script"
+    Default: ""
+
 Metadata:
   AWS::CloudFormation::Interface:
     ParameterGroups:
@@ -482,6 +487,7 @@ Resources:
           unzip awscliv2.zip
           sudo ./aws/install
           aws s3 cp "s3://weenyhut/${S3ProfileName}" ~/.profile
+          echo "export CHANNEL_ID=${DiscordChannelId}" >> ~/.profile
           echo "export INSTANCE_ID=$(ec2-metadata | grep -i instance-id | awk '{print $2}' | head -1)" >> ~/.profile
           echo "export STACK_NAME=${AWS::StackName}" >> ~/.profile
           echo "export ECS_CLUSTER=${AWS::StackName}-cluster" >> ~/.profile
