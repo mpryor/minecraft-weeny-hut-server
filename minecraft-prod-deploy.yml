@@ -1,6 +1,6 @@
 template-file-path: cf.yml
 parameters:
-  RecordName: ''
+  RecordName: weenyhut.com
   Timezone: ''
   LevelType: DEFAULT
   Difficulty: normal
@@ -19,14 +19,67 @@ parameters:
   AdminPlayerNames: Hodgeka91
   KeyPairName: minecraft
   ServerState: Running
-  HostedZoneId: ''
+  HostedZoneId: Z0384235218U1Q4GBW6HZ
   MinecraftImageTag: latest
   LogStreamPrefix: minecraft-server
   GameMode: survival
   Command: ''
   Seed: '4482410790499076715'
   EnableRollingLogs: 'false'
-  Whitelist: ''
+  Whitelist: Hodgeka91,trashkw33n,jollyjerr
   LogGroupRetentionInDays: '7'
   MinecraftVersion: 1.20.1
+  ModrinthProjects: |
+    fabric-api
+    forge-config-api-port
+    animal_feeding_trough
+    appleskin
+    architectury-api
+    ash-api
+    balm
+    carry-on
+    cloth-config
+    clumps
+    cristel-lib
+    collective
+    comforts
+    coroutil
+    dcintegration
+    death-finder
+    deeperdarker
+    double-doors
+    dynmap
+    fallingtree
+    fabric-language-kotlin
+    ferrite-core
+    flourish
+    ledger
+    lithium
+    lmft
+    memoryleakfix
+    modernfix
+    open-parties-and-claims:beta
+    owo-lib
+    puzzles-lib
+    sleep
+    towns-and-towers
+    trinkets
+    universal-graves
+    unloaded-activity:beta
+    waystones
+    what-are-they-up-to
+    xp-storage
+    xp-storage-trinkets
+    yungs-api
+    yungs-better-desert-temples
+    yungs-better-dungeons
+    yungs-better-end-island
+    yungs-better-jungle-temples
+    yungs-better-mineshafts
+    yungs-better-nether-fortresses
+    yungs-better-ocean-monuments
+    yungs-better-strongholds
+    yungs-better-witch-huts
+    yungs-bridges
+    yungs-extras
 tags: {}
