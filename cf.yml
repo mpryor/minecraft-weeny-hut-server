@@ -317,8 +317,6 @@ Conditions:
   TimezoneProvided: !Not [ !Equals [ !Ref Timezone, '' ] ]
   ModsProvided: !Not [ !Equals [ !Ref Mods, '' ] ]
   ModrinthProjectsProvided: !Not [ !Equals [ !Ref ModrinthProjects, '' ] ]
-  S3ProfileNameProvider: !Not [ !Equals [ !Ref S3ProfileName, '' ] ]
-
 
 Mappings:
   ServerState:
