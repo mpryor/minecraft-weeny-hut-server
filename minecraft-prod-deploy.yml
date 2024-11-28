@@ -16,7 +16,7 @@ parameters:
   LogGroupName: ''
   InstanceType: t3.large
   ECSAMI: /aws/service/ecs/optimized-ami/amazon-linux-2/recommended/image_id
-  AdminPlayerNames: Hodgeka91
+  AdminPlayerNames: Hodgeka91,trashkw33n,jollyjerr
   KeyPairName: minecraft
   ServerState: Running
   HostedZoneId: Z0384235218U1Q4GBW6HZ
