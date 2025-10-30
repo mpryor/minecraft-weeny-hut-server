@@ -26,7 +26,7 @@ parameters:
   Command: ''
   Seed: '4482410790499076715'
   EnableRollingLogs: 'false'
-  Whitelist: Hodgeka91,trashkw33n,jollyjerr
+  Whitelist: Hodgeka91,trashkw33n,jollyjerr,LANMAN23
   LogGroupRetentionInDays: '7'
   MinecraftVersion: 1.20.1
   S3ProfileName: .profile-dev
