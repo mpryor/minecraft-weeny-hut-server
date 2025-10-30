@@ -1,38 +1,9 @@
-template-file-path: cf.yml
+template-file-path: minecraft-dev-deploy.yml
 parameters:
   RecordName: dev.weenyhut.com
   Timezone: ''
   LevelType: DEFAULT
-  Difficulty: normal
-  Memory: 3G
-  EntryPoint: ''
-  ViewDistance: '-1'
-  SpotPrice: '0.05'
-  MaxPlayers: '-1'
-  ContainerInsights: disabled
-  YourIPv4: ''
-  MinecraftTypeTag: FABRIC
-  YourIPv6: ''
-  LogGroupName: ''
-  InstanceType: t3.medium
-  ECSAMI: /aws/service/ecs/optimized-ami/amazon-linux-2/recommended/image_id
-  AdminPlayerNames: Hodgeka91
-  KeyPairName: minecraft
-  ServerState: Running
-  HostedZoneId: Z0384235218U1Q4GBW6HZ
-  MinecraftImageTag: latest
-  LogStreamPrefix: minecraft-server
-  GameMode: survival
-  Command: ''
-  Seed: '4482410790499076715'
-  EnableRollingLogs: 'false'
-  Whitelist: Hodgeka91,trashkw33n,jollyjerr,LANMAN23
-  LogGroupRetentionInDays: '7'
-  MinecraftVersion: 1.20.1
-  S3ProfileName: .profile-dev
-  DiscordChannelId: "1298372122812612714"
-  MaxMinutesIdle: "20"
-  ModrinthProjects: |
+  ModrinthProjects: |-
     fabric-api
     forge-config-api-port
     animal_feeding_trough
@@ -51,6 +22,7 @@ parameters:
     death-finder
     deeperdarker
     double-doors
+    dynmap
     fallingtree
     fabric-language-kotlin
     ferrite-core
@@ -84,4 +56,34 @@ parameters:
     yungs-better-witch-huts
     yungs-bridges
     yungs-extras
+  Difficulty: normal
+  Memory: 3G
+  EntryPoint: ''
+  ViewDistance: '-1'
+  SpotPrice: '0.05'
+  MaxPlayers: '-1'
+  MaxMinutesIdle: '20'
+  ContainerInsights: disabled
+  YourIPv4: ''
+  MinecraftTypeTag: FABRIC
+  YourIPv6: ''
+  LogGroupName: ''
+  InstanceType: t3.medium
+  ECSAMI: /aws/service/ecs/optimized-ami/amazon-linux-2/recommended/image_id
+  AdminPlayerNames: Hodgeka91
+  KeyPairName: minecraft
+  ServerState: Running
+  HostedZoneId: Z0384235218U1Q4GBW6HZ
+  MinecraftImageTag: latest
+  S3ProfileName: .profile-dev
+  LogStreamPrefix: minecraft-server
+  GameMode: survival
+  Command: ''
+  Mods: ''
+  Seed: '4482410790499076715'
+  EnableRollingLogs: 'false'
+  Whitelist: Hodgeka91,trashkw33n,jollyjerr
+  DiscordChannelId: '1298372122812612714'
+  LogGroupRetentionInDays: '7'
+  MinecraftVersion: 1.20.1
 tags: {}
