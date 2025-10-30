@@ -43,6 +43,7 @@ parameters:
     carry-on
     cloth-config
     clumps
+    create-fabric
     cristel-lib
     collective
     comforts
