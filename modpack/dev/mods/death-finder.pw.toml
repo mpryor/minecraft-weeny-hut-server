@@ -1,0 +1,13 @@
+name = "Death Finder"
+filename = "DeathFinder-v8.0.1-1.20.1-Fabric.jar"
+side = "both"
+
+[download]
+url = "https://cdn.modrinth.com/data/wNxIBREV/versions/mqkYUele/DeathFinder-v8.0.1-1.20.1-Fabric.jar"
+hash-format = "sha512"
+hash = "2616234045dc5dfb654ba7165120a2e134d2725dfe29730c8499b68ed7030d0a5a5538f728decb56f228a01f4dbd20bbda37bc38921351b21647bffa40b815ac"
+
+[update]
+[update.modrinth]
+mod-id = "wNxIBREV"
+version = "mqkYUele"

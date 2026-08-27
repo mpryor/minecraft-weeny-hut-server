@@ -39,6 +39,67 @@ All things going well, your Minecraft server should be running in five minutes o
 
 At this point you should *really* configure remote access as per the below section, so that you can access the server and modify `server.properties` (e.g. view-distance, allow nether, etc.).
 
+## Modpack
+
+Mods for both servers live in [`modpack/`](modpack/) and are managed with
+[packwiz](https://packwiz.infra.link/). There are two packs — `modpack/dev/`
+(dev.weenyhut.com) and `modpack/prod/` (weenyhut.com) — and each pins every mod
+to an exact Modrinth version and hash, so the server and every player's client
+run byte-identical jars.
+
+**Servers** sync via the `PackwizUrl` parameter in the deploy files, which sets
+`PACKWIZ_URL` on the container; packwiz-installer runs on every container start.
+**Clients** sync via Prism Launcher, which runs the pack installer on every
+launch. Both ends read the same published `pack.toml`, so nobody hand-installs
+anything.
+
+### Updating mods
+
+```bash
+cd modpack/dev
+packwiz update --all      # or: packwiz modrinth add <slug>
+packwiz refresh           # ALWAYS - rewrites the index hashes
+git commit -am "Update dev mods" && git push
+```
+
+Pushing to `master` triggers `.github/workflows/publish-modpack.yml`, which
+verifies both packs are consistent and publishes them to GitHub Pages. Test on
+the dev server, then promote the mods you want into `modpack/prod/`:
+
+```bash
+cp modpack/dev/mods/<slug>.pw.toml modpack/prod/mods/
+(cd modpack/prod && packwiz refresh)
+```
+
+Mod changes don't alter the ECS task definition, so **no CloudFormation deploy
+is needed.** Once published, a server picks the pack up on its next start — or
+force it immediately with:
+
+```bash
+scripts/redeploy <stack-name>
+```
+
+Note that this restarts the container and disconnects anyone online. If the
+server is already idled down by `scripts/autoshutdown`, the script says so and
+exits; the new mods load on the next `/mcstart`.
+
+Players who test on dev need a **second Prism instance** pointed at the dev
+pack — one Minecraft instance can only track one pack.
+
+See [`modpack/README.md`](modpack/README.md) for the full workflow, the
+client/server `side` split, and deliberate version pins.
+
+### NeoForge trial
+
+`modpack/neoforge/` is a scaffolded migration of the pack to NeoForge 1.21.1,
+deployed separately as `neoforge.weenyhut.com` via
+`minecraft-neoforge-deploy.yml`. It is a trial, not part of the dev -> prod
+path, and the stack does not exist until that config is deployed. 45 of the 52
+mods carried over; see
+[`modpack/NEOFORGE-MIGRATION.md`](modpack/NEOFORGE-MIGRATION.md) for the gap
+analysis.
+
+
 ## Optional Features
 
 ### Remote Access
@@ -89,6 +150,10 @@ Delete the CloudFormation stack. Done.
 **I'm running the "latest" version, and a new version has just been released. How do I update my server?** 
 
 You can force a redeployment of the service via ECS. [Update the service](https://console.aws.amazon.com/ecs/home?#/clusters/minecraft/services/minecraft/update), and select `Force new deployment`. 
+
+**How do I add or update mods?** 
+
+See the Modpack section above. Mods are managed in `modpack/` with packwiz - don't install jars onto the server by hand, they'll be removed on the next sync.
 
 **How can I change map settings, server settings etc.** 
 

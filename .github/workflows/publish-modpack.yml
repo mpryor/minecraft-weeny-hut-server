@@ -1,0 +1,60 @@
+name: Publish modpack
+
+on:
+  push:
+    branches: [master]
+    paths: ['modpack/**']
+  pull_request:
+    paths: ['modpack/**']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  # index.toml stores a hash of every mod file, and pack.toml stores a hash of
+  # the index. Hand-editing a .pw.toml without running `packwiz refresh` makes
+  # clients and the server silently install the stale version, with no error.
+  # Fail the build rather than publish a pack in that state.
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: stable
+      - name: Install packwiz
+        run: go install github.com/packwiz/packwiz@latest
+      - name: Check refresh is a no-op
+        run: |
+          for env in dev prod neoforge; do
+            (cd "modpack/$env" && packwiz refresh)
+          done
+          if ! git diff --exit-code -- modpack/; then
+            echo "::error::'packwiz refresh' produced changes. Run it locally and commit the result."
+            exit 1
+          fi
+          echo "Both packs are consistent."
+
+  deploy:
+    needs: verify
+    if: github.ref == 'refs/heads/master' && github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      # modpack/ becomes the site root, so the packs resolve at
+      #   <pages-url>/dev/pack.toml  and  <pages-url>/prod/pack.toml
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: modpack
+      - id: deployment
+        uses: actions/deploy-pages@v4

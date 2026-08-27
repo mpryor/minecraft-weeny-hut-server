@@ -1,0 +1,13 @@
+name = "XP Storage - Trinkets"
+filename = "xpstorage_trinkets-1.0+1.20.1.jar"
+side = "both"
+
+[download]
+url = "https://cdn.modrinth.com/data/GZeDW6Px/versions/IhX0ycBe/xpstorage_trinkets-1.0%2B1.20.1.jar"
+hash-format = "sha512"
+hash = "f7b9b5383863f86c0e9869a86b7036993446adb02dbb8e4851094960a7056bb23908ddf8fc6eb83d41ba76d24477affc0df4f1a5860ef3b7c2afa67e5a8a605d"
+
+[update]
+[update.modrinth]
+mod-id = "GZeDW6Px"
+version = "IhX0ycBe"

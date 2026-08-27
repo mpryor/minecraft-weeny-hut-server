@@ -1,0 +1,44 @@
+#!/bin/bash
+# Restart the Minecraft ECS service so packwiz-installer re-syncs mods from the
+# published pack.
+#
+# Mod changes do NOT alter the task definition, so this needs no CloudFormation
+# deploy - publish the pack, then run this.
+#
+# Usage: scripts/redeploy <stack-name>
+
+set -euo pipefail
+
+STACK="${1:-}"
+if [[ -z "$STACK" ]]; then
+  echo "usage: $0 <stack-name>" >&2
+  exit 2
+fi
+
+CLUSTER="${STACK}-cluster"
+SERVICE="${STACK}-ecs-service"
+
+DESIRED=$(aws ecs describe-services --cluster "$CLUSTER" --services "$SERVICE" \
+  --query 'services[0].desiredCount' --output text 2>/dev/null || true)
+
+if [[ -z "$DESIRED" || "$DESIRED" == "None" ]]; then
+  echo "Could not find service '${SERVICE}' in cluster '${CLUSTER}'." >&2
+  echo "Check the stack name, region, and AWS credentials." >&2
+  exit 1
+fi
+
+# autoshutdown scales the service to 0 when idle. force-new-deployment is a
+# silent no-op in that state, so say so rather than pretending we did something.
+if [[ "$DESIRED" == "0" ]]; then
+  echo "${STACK}: server is idled down (desiredCount=0)."
+  echo "Mods will sync automatically the next time it starts."
+  exit 0
+fi
+
+echo "${STACK}: forcing new deployment - connected players will be disconnected."
+aws ecs update-service --cluster "$CLUSTER" --service "$SERVICE" \
+  --force-new-deployment >/dev/null
+
+echo "${STACK}: waiting for the service to stabilise..."
+aws ecs wait services-stable --cluster "$CLUSTER" --services "$SERVICE"
+echo "${STACK}: redeployed - packwiz synced the pack at container start."
