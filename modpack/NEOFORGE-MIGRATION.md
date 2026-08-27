@@ -125,25 +125,43 @@ Completion. 67 of the 76 mods load on the server.
 Distant Horizons, Jade, REI, and both Xaero's maps stay `both` — Modrinth
 declares them `optional` on the server, and they are genuinely dual-sided.
 
-### The client mods do not reach players automatically
+### Two client delivery paths, and what each carries
 
-This is the unsolved half. itzg's image hardcodes `packwiz-installer -s server`,
-so a `client` mod never lands in `/data/mods`, and AutoModpack only distributes
-what is in `/data/mods`. Setting them to `both` to force them through is what
-caused both crashes — that route is closed.
+**Prism + packwiz-installer — unaffected.** `packwiz-installer` defaults to
+`-s client`, and a client takes both `both` and `client` mods. Verified against
+the published pack: 62 of 76 jars, Sodium and Iris included. Marking those nine
+mods `client` changed nothing for players on this path; it only changed what the
+*server* loads.
 
-Options, none yet implemented:
+**AutoModpack — needed help.** The image runs `packwiz-installer -s server`
+(`start-setupModpack:40`, hardcoded, no env var), so `client` mods never reach
+`/data/mods`, and AutoModpack only serves `/data/mods`. Players who join without
+a Prism instance would get none of them.
 
-1. **AutoModpack `host-modpack/main/mods/`** — the intended mechanism. Files
-   there are served to clients and never loaded by the server. Needs something
-   to populate it, since packwiz will not.
-2. **Ship a client-side packwiz pack** players point Prism at, alongside the
-   server pack. Two packs to keep in step.
-3. **Leave client mods to players.** Sodium and Iris are already the normal
-   client install; the rest are conveniences.
+`GENERIC_PACKS` closes that gap. `handleGenericPacks` runs *after*
+`handlePackwiz` and copies a zip's contents into `/data`, so it can place client
+content under `automodpack/host-modpack/main/`, where AutoModpack serves it and
+the server never loads it. `scripts/build-client-extras.py` builds that zip from
+the pack itself -- every `side = "client"` mod, downloaded and checked against
+the SHA-512 packwiz recorded -- plus anything in `client-extras/neoforge/`.
+CI builds it on every publish, so it cannot drift from the pack.
 
-**Do not set a client mod to `both` to work around this.** Before adding any new
-client mod as `both`, check both hazards:
+**The top-level `config/` directory in that zip is load-bearing.**
+`start-setupModpack:244` recomputes the content base with
+
+```
+mc-image-helper find --max-depth=3 --type=directory \
+    --name=mods,plugins,config --only-shallowest --fail-no-matches
+```
+
+Verified in the image: with the anchor the base resolves to the zip root; without
+it the call exits 1 and the container start fails. Were the layout ever made
+shallower, the base would resolve to `automodpack/host-modpack/main` and the
+client jars would be copied straight into `/data/mods` -- crashing the server
+exactly as before. Do not remove it.
+
+**Do not set a client mod to `both`.** Before adding any new client mod, check
+both hazards:
 
 ```bash
 # bootstrap-level service -> crashes before mod loading (Sodium class)
@@ -151,6 +169,14 @@ unzip -l <mod>.jar | grep -E 'META-INF/services/(cpw\.mods\.modlauncher|net\.neo
 # declared support -> server_side "unsupported" means client-only (Freecam class)
 curl -s https://api.modrinth.com/v2/project/<slug> | jq '{client_side, server_side}'
 ```
+
+### Shaderpacks
+
+`client-extras/neoforge/shaderpacks/` ships shader packs to players through the
+same zip. Currently Complementary Reimagined r5.5.1, taken from the prod client
+profile. Iris is in the pack as `client`, so both paths get the loader; before
+this, neither path carried the shader files themselves and players supplied their
+own. `resourcepacks/` and `config/` alongside it work the same way.
 
 ### Still not carried over
 

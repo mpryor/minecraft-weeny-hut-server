@@ -1,0 +1,4 @@
+
+# Built by scripts/build-client-extras.py in CI; never committed so it cannot
+# drift from the pack it is derived from.
+modpack/*-client-extras.zip

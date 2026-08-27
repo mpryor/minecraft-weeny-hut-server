@@ -33,5 +33,6 @@ parameters:
   DiscordChannelId: "1298372122812612714"
   MaxMinutesIdle: "20"
   PackwizUrl: https://mpryor.github.io/minecraft-weeny-hut-server/neoforge/pack.toml
+  GenericPacks: https://mpryor.github.io/minecraft-weeny-hut-server/neoforge-client-extras.zip
   NeoForgeVersion: "21.1.248"
 tags: {}

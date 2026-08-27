@@ -61,6 +61,18 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
+
+      # Client-only mods never reach /data/mods (the image runs
+      # packwiz-installer -s server), and AutoModpack only serves /data/mods, so
+      # players relying on AutoModpack would get none of them. This zip carries
+      # them, plus shaderpacks, into automodpack/host-modpack/main via the
+      # container's GENERIC_PACKS handling. Built here rather than committed so
+      # it can never drift from the pack it is derived from.
+      - name: Build client-extras generic pack
+        run: |
+          python3 scripts/build-client-extras.py neoforge
+          unzip -l modpack/neoforge-client-extras.zip
+
       # modpack/ becomes the site root, so the packs resolve at
       #   <pages-url>/dev/pack.toml  and  <pages-url>/prod/pack.toml
       - uses: actions/upload-pages-artifact@v3

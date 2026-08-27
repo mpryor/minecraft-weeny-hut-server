@@ -190,6 +190,11 @@ Parameters:
     Description: "URL of a packwiz pack.toml. When set, packwiz-installer runs on every container start and syncs mods to match the pack. Takes the place of ModrinthProjects."
     Default: ""
 
+  GenericPacks:
+    Type: String
+    Description: "URL of a zip unpacked into /data after packwiz runs. Used to deliver client-only content (mods, shaderpacks) into automodpack/host-modpack/main, where AutoModpack serves it to players without the server loading it. Built by scripts/build-client-extras.py."
+    Default: ""
+
   S3ProfileName:
     Type: String
     Description: "The name of the secure profile to fetch from S3"
@@ -235,6 +240,7 @@ Metadata:
         - EnableRollingLogs
         - Timezone
         - PackwizUrl
+        - GenericPacks
         - NeoForgeVersion
       - Label:
           default: Optional ECS Cluster and Task Configuration
@@ -277,6 +283,8 @@ Metadata:
         default: "Minecraft version ie 1.16.3"
       PackwizUrl:
         default: "URL to a packwiz pack.toml; mods sync from it on every container start"
+      GenericPacks:
+        default: "URL to a zip of client-only content unpacked into /data after packwiz"
       ContainerInsights:
         default: "ECS Container Insights provide additional container metrics, and supports collection of Prometheus metrics.  Additional AWS charges may apply."
       EntryPoint:
@@ -342,6 +350,7 @@ Conditions:
   ModsProvided: !Not [ !Equals [ !Ref Mods, '' ] ]
   ModrinthProjectsProvided: !Not [ !Equals [ !Ref ModrinthProjects, '' ] ]
   PackwizUrlProvided: !Not [ !Equals [ !Ref PackwizUrl, '' ] ]
+  GenericPacksProvided: !Not [ !Equals [ !Ref GenericPacks, '' ] ]
   NeoForgeVersionProvided: !Not [ !Equals [ !Ref NeoForgeVersion, '' ] ]
 
 Mappings:
@@ -764,6 +773,11 @@ Resources:
               - PackwizUrlProvided
               - Name: "PACKWIZ_URL"
                 Value: !Sub "${PackwizUrl}"
+              - !Ref 'AWS::NoValue'
+            - !If
+              - GenericPacksProvided
+              - Name: "GENERIC_PACKS"
+                Value: !Sub "${GenericPacks}"
               - !Ref 'AWS::NoValue'
             - !If
               - NeoForgeVersionProvided
