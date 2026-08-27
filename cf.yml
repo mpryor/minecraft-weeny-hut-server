@@ -413,6 +413,9 @@ Resources:
 
   Route:
     Type: AWS::EC2::Route
+    # The IGW must be attached to the VPC before a route can target it,
+    # and CloudFormation cannot infer that from the refs below.
+    DependsOn: InternetGatewayAttachment
     Properties: 
       DestinationCidrBlock: 0.0.0.0/0
       GatewayId: !Ref InternetGateway
