@@ -67,7 +67,7 @@ metafile = true
 
 [[files]]
 file = "mods/chat-heads.pw.toml"
-hash = "04a3b696a0af24d8f192e03283ebaec49d65f2eab9c5ec2d7bd8d39af25119ad"
+hash = "80455b28c3010ad153ccabc2998cb445b9854b26b386628243a9c8160b8d7e8e"
 metafile = true
 
 [[files]]
@@ -167,7 +167,7 @@ metafile = true
 
 [[files]]
 file = "mods/freecam.pw.toml"
-hash = "dd2dd5801f199427e7595250f6bed29391edd2bc63c1a04498c483bdb812d0c3"
+hash = "184c6768f11e0c33c22c104397ad559c5b9337c709d1d05c8e9c93891dcddaee"
 metafile = true
 
 [[files]]
@@ -177,12 +177,12 @@ metafile = true
 
 [[files]]
 file = "mods/inventory-profiles-next.pw.toml"
-hash = "29f7b8940725943a7cb56e903e0eb94b5c5a43ec81cb6f25179b76aa5dfd1411"
+hash = "ab503e89461dff879ee793253e173625b6ab868f570a371323ef725e567cf5ea"
 metafile = true
 
 [[files]]
 file = "mods/iris.pw.toml"
-hash = "88af46cd38ac7c3aa15e977ec2c25357c7742c3b60101819f53976960d2b6f18"
+hash = "f67aa60c765593a8c70f78296a460349c6aef5f4a16d173eae02e8803b545ad4"
 metafile = true
 
 [[files]]
@@ -197,12 +197,12 @@ metafile = true
 
 [[files]]
 file = "mods/lambdynamiclights.pw.toml"
-hash = "f8c341502ffa16cfd753483d6ff4eb77a672ebc68009694e0c7db99c68f16c81"
+hash = "b85d562b35f68cdbb0f79bbdebc11cb938002c727d9f982ed5743c8488c74ac7"
 metafile = true
 
 [[files]]
 file = "mods/libipn.pw.toml"
-hash = "b73c0859f4e434669bb9799e561c23c78661eb30d15c632d1baca0c92faadcc2"
+hash = "0d2a00252d64ed7d2d9b19994f7accb780304be61f3903d36e810714b414c6cb"
 metafile = true
 
 [[files]]
@@ -222,7 +222,7 @@ metafile = true
 
 [[files]]
 file = "mods/mouse-tweaks.pw.toml"
-hash = "bf8fe95846cd7a26b1e90c703abaa3963a122a938b5ed1710df1929a792054c9"
+hash = "6bc414cc0f2d4c078fe83f384d786343f701f371d657c5279b5b0df1595804bd"
 metafile = true
 
 [[files]]
@@ -267,7 +267,7 @@ metafile = true
 
 [[files]]
 file = "mods/smart-completion.pw.toml"
-hash = "fcef91b3f21fcdf418317dfc22f7b8d8405d9d4a588332aba559cc5590e9d958"
+hash = "2fcd822407c4c5fb1c74b5f192175e54f0e71338db14f3fadc82ac2c75db021d"
 metafile = true
 
 [[files]]

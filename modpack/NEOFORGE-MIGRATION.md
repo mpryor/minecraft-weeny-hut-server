@@ -88,39 +88,68 @@ Modrinth project + version IDs, release channel wherever one exists.
 Two resolved to beta builds because no release-channel NeoForge 1.21.1 build
 exists at all: **Distant Horizons** (0 of 22) and **REI** (0 of 6).
 
-Every `side = "client"` mod was set to `both` deliberately. itzg's image
-hardcodes `packwiz-installer -s server`, so a client-side mod would never reach
-`/data/mods` and therefore never reach AutoModpack. Setting `both` puts them in
-the server's mods folder, where NeoForge skips them via `Dist.CLIENT` and
-AutoModpack still hands them to players.
+Every `side = "client"` mod was initially set to `both`, on the assumption that
+NeoForge would skip them on a dedicated server the way Fabric does. **That
+assumption is wrong, and it took the server down twice on 2026-08-27.**
 
-**One mod could not take that treatment: Sodium.** It crash-looped the server
-within two minutes of the pack going live on 2026-08-27:
+Fabric reads `"environment": "client"` from `fabric.mod.json` and never loads the
+mod on a server. **NeoForge has no equivalent per-mod gate.** It loads every jar
+in `mods/` and only strips client-only *classes* at runtime via
+`RuntimeDistCleaner`. A client mod therefore runs its constructor on the server,
+and dies if that constructor touches anything client-only:
 
 ```
-Exception in thread "main" java.lang.NoClassDefFoundError: org/lwjgl/Version
+RuntimeDistCleaner: Attempted to load class me/shedaniel/clothconfig2/api/ConfigEntryBuilder
+                    for invalid dist DEDICATED_SERVER
+Failed to create mod instance. ModID: freecam
+```
+
+Sodium failed even earlier, before the mod list was read at all. It registers a
+`META-INF/services/net.neoforged.neoforgespi.earlywindow.GraphicsBootstrapper`,
+and FML invokes every one of those from `ImmediateWindowHandler.load()` during
+ModLauncher bootstrap. That path touches LWJGL, which a dedicated server does not
+ship:
+
+```
+NoClassDefFoundError: org/lwjgl/Version
   at LAYER SERVICE/sodium_service@0.8.12/...PreLaunchChecks.checkEnvironment
   at MC-BOOTSTRAP/fml_loader@4.0.43/...ImmediateWindowHandler.load
 ```
 
-`Dist.CLIENT` filtering is not early enough. Sodium ships a
-`META-INF/services/net.neoforged.neoforgespi.earlywindow.GraphicsBootstrapper`,
-and FML invokes every registered `GraphicsBootstrapper` from
-`ImmediateWindowHandler.load()` during ModLauncher bootstrap — before the mod
-list is read, so before anything can be skipped for being client-only. That code
-path touches LWJGL, which a dedicated server does not ship.
+**Sides are now taken from each project's declared Modrinth support, not from
+what we want the distribution mechanism to do.** The nine mods with
+`server_side: unsupported` are `client`: Sodium, Iris, Freecam, Chat Heads,
+LambDynamicLights, Inventory Profiles Next, libIPN, Mouse Tweaks, Smart
+Completion. 67 of the 76 mods load on the server.
 
-Sodium is now `side = "client"`. Iris still works server-side without it: Iris's
-own `sodium` dependency is declared `side = "CLIENT"`, so it is not enforced on
-a dedicated server. **Sodium will not reach players through AutoModpack** — it
-has to be installed client-side out-of-band.
+Distant Horizons, Jade, REI, and both Xaero's maps stay `both` — Modrinth
+declares them `optional` on the server, and they are genuinely dual-sided.
 
-Auditing the other 75 jars for the same hazard, Sodium is the only mod in the
-pack registering a bootstrap-level FML/ModLauncher service that isn't
-dist-guarded. **Check for one before setting a new client mod to `both`:**
+### The client mods do not reach players automatically
+
+This is the unsolved half. itzg's image hardcodes `packwiz-installer -s server`,
+so a `client` mod never lands in `/data/mods`, and AutoModpack only distributes
+what is in `/data/mods`. Setting them to `both` to force them through is what
+caused both crashes — that route is closed.
+
+Options, none yet implemented:
+
+1. **AutoModpack `host-modpack/main/mods/`** — the intended mechanism. Files
+   there are served to clients and never loaded by the server. Needs something
+   to populate it, since packwiz will not.
+2. **Ship a client-side packwiz pack** players point Prism at, alongside the
+   server pack. Two packs to keep in step.
+3. **Leave client mods to players.** Sodium and Iris are already the normal
+   client install; the rest are conveniences.
+
+**Do not set a client mod to `both` to work around this.** Before adding any new
+client mod as `both`, check both hazards:
 
 ```bash
+# bootstrap-level service -> crashes before mod loading (Sodium class)
 unzip -l <mod>.jar | grep -E 'META-INF/services/(cpw\.mods\.modlauncher|net\.neoforged\.(fml\.loading|neoforgespi\.(locating|earlywindow)))'
+# declared support -> server_side "unsupported" means client-only (Freecam class)
+curl -s https://api.modrinth.com/v2/project/<slug> | jq '{client_side, server_side}'
 ```
 
 ### Still not carried over
