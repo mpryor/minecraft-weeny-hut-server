@@ -92,8 +92,36 @@ Every `side = "client"` mod was set to `both` deliberately. itzg's image
 hardcodes `packwiz-installer -s server`, so a client-side mod would never reach
 `/data/mods` and therefore never reach AutoModpack. Setting `both` puts them in
 the server's mods folder, where NeoForge skips them via `Dist.CLIENT` and
-AutoModpack still hands them to players. **If the server fails to boot on a
-client mod, flip that one back to `client` and host it out-of-band.**
+AutoModpack still hands them to players.
+
+**One mod could not take that treatment: Sodium.** It crash-looped the server
+within two minutes of the pack going live on 2026-08-27:
+
+```
+Exception in thread "main" java.lang.NoClassDefFoundError: org/lwjgl/Version
+  at LAYER SERVICE/sodium_service@0.8.12/...PreLaunchChecks.checkEnvironment
+  at MC-BOOTSTRAP/fml_loader@4.0.43/...ImmediateWindowHandler.load
+```
+
+`Dist.CLIENT` filtering is not early enough. Sodium ships a
+`META-INF/services/net.neoforged.neoforgespi.earlywindow.GraphicsBootstrapper`,
+and FML invokes every registered `GraphicsBootstrapper` from
+`ImmediateWindowHandler.load()` during ModLauncher bootstrap — before the mod
+list is read, so before anything can be skipped for being client-only. That code
+path touches LWJGL, which a dedicated server does not ship.
+
+Sodium is now `side = "client"`. Iris still works server-side without it: Iris's
+own `sodium` dependency is declared `side = "CLIENT"`, so it is not enforced on
+a dedicated server. **Sodium will not reach players through AutoModpack** — it
+has to be installed client-side out-of-band.
+
+Auditing the other 75 jars for the same hazard, Sodium is the only mod in the
+pack registering a bootstrap-level FML/ModLauncher service that isn't
+dist-guarded. **Check for one before setting a new client mod to `both`:**
+
+```bash
+unzip -l <mod>.jar | grep -E 'META-INF/services/(cpw\.mods\.modlauncher|net\.neoforged\.(fml\.loading|neoforgespi\.(locating|earlywindow)))'
+```
 
 ### Still not carried over
 
