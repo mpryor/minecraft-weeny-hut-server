@@ -59,6 +59,31 @@ To pin a mod to a specific version:
 packwiz modrinth add --project-id <id> --version-id <version-id>
 ```
 
+### Every add or remove needs a catalog entry
+
+Adding or removing a mod is a two-file change: the `.pw.toml` **and**
+`catalog/<env>.toml` at the repo root. CI fails if they disagree.
+
+```bash
+python3 scripts/check-catalog.py   # run before committing
+```
+
+The catalog records what each mod is and **why we added it** — the one thing the
+pack itself cannot tell you six months later.
+
+It has to live outside `modpack/` because packwiz will not hold that
+information. `packwiz update` rewrites a mod's `.pw.toml` from a Go struct and
+silently discards comments and any key it does not recognise, so a note written
+inline survives until the next version bump and then vanishes without warning.
+`packwiz refresh` does the same to unknown keys in `pack.toml`. A sidecar file
+inside the pack directory does not work either — `packwiz refresh` indexes every
+file it finds there, so it would be downloaded to the server and to every
+player, unless excluded with a `.packwizignore`.
+
+A `reason` of `TODO` means nobody has written the rationale down yet. CI reports
+the count but does not fail on it; filling one in is a good thing to do while
+you are touching a mod anyway.
+
 ## Promoting dev to prod
 
 Copy the specific mod files you're promoting, then refresh:

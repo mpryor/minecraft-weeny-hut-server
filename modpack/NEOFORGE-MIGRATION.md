@@ -30,9 +30,14 @@ Loader pinned to NeoForge `21.1.248`.
 
 ## What carried over
 
-**45 mods installed** — 42 direct carry-overs plus 3 replacements for
+The pack started at **45 mods** — 42 direct carry-overs plus 3 replacements for
 Fabric-only counterparts. Every one verified to have a `neoforge` + `1.21.1`
 build. No unmet required dependencies.
+
+It is now **76 mods**. See [What was added after the migration](#what-was-added-after-the-migration)
+below, and `catalog/neoforge.toml` for what every one of them is and why it is
+here. Counts in this document describe the original migration; the catalog is
+the live list, and CI keeps it in step with the pack.
 
 | Fabric | NeoForge | Note |
 |--------|----------|------|
@@ -62,6 +67,51 @@ Adding any candidate is one command:
 cd modpack/neoforge && packwiz modrinth add ly-graves && packwiz refresh
 ```
 
+## What was added after the migration
+
+**2026-08-27 — 31 mods, taking the pack from 45 to 76.** All pinned to explicit
+Modrinth project + version IDs, release channel wherever one exists.
+
+- **15 client mods** for parity with the prod Modrinth profile, which had been
+  the de-facto client pack: Sodium, Iris, Distant Horizons, Jade, REI, Xaero's
+  Minimap and World Map, Chat Heads, LambDynamicLights, Inventory Profiles Next,
+  libIPN, Enchantment Descriptions, Freecam, Mouse Tweaks, Smart Completion.
+- **5 content carry-overs** the original migration missed because they were only
+  ever in the client profile: Create Jetpack, Create: Diesel Generators,
+  GeckoLib, Bookshelf, Prickle.
+- **4 NeoForge-only mods** with no Fabric equivalent, the point of the trial:
+  Ars Nouveau, Apotheosis, Sophisticated Storage, Sophisticated Backpacks.
+- **7 transitive dependencies** resolved by packwiz: `placebo`,
+  `apothic-attributes`, `apothic-enchanting`, `apothic-spawners`, `patchouli`,
+  `sophisticated-core`, `prickle`.
+
+Two resolved to beta builds because no release-channel NeoForge 1.21.1 build
+exists at all: **Distant Horizons** (0 of 22) and **REI** (0 of 6).
+
+Every `side = "client"` mod was set to `both` deliberately. itzg's image
+hardcodes `packwiz-installer -s server`, so a client-side mod would never reach
+`/data/mods` and therefore never reach AutoModpack. Setting `both` puts them in
+the server's mods folder, where NeoForge skips them via `Dist.CLIENT` and
+AutoModpack still hands them to players. **If the server fails to boot on a
+client mod, flip that one back to `client` and host it out-of-band.**
+
+### Still not carried over
+
+`ledger`, `universal-graves`, `dcintegration`, `xp-storage`,
+`xp-storage-trinkets`, `memoryleakfix` remain gaps — see the table above.
+Polymer-based server mods (`universal-graves`, `taterzens`) are structurally
+unportable: Polymer is a Fabric-only framework.
+
+Two mods in the prod client profile are local builds with no upstream, so they
+cannot be pulled by packwiz and must be ported by hand:
+`diesel-jetpack-1.0.0.jar` and `hollowharvest-1.0.0.jar`. Both of their
+dependencies (Create Jetpack, Create: Diesel Generators, GeckoLib) now have
+NeoForge 1.21.1 builds in the pack, so the ports are viable.
+
+FTB Library, Quests, and Teams are in the prod client profile but are
+CurseForge-only — reachable with `packwiz curseforge add`, not the Modrinth
+path used everywhere else here.
+
 ## Known caveats
 
 - **Three mods resolved to beta-channel builds**: `owo-lib` (only a beta exists
@@ -77,6 +127,12 @@ cd modpack/neoforge && packwiz modrinth add ly-graves && packwiz refresh
 - **Sizing was raised** to `t3.large` / `4G` (dev runs `t3.medium` / `3G`).
   45 mods including Create on 1.21 will not fit in a 3G heap on a 4GB instance.
   This costs more than dev — drop it back if the trial is short.
+- **Heap has not been re-checked since the pack grew to 76 mods.** The `4G`
+  figure was sized for 45. The 2026-08-27 additions include Ars Nouveau,
+  Apotheosis (plus three `apothic-*` modules), and Sophisticated
+  Storage/Backpacks, all of which carry real world-data and registry cost.
+  **Watch heap on the first boot after this change and before inviting players
+  in**; budget for a larger instance.
 - **`.profile-dev` and dev's Discord channel are reused.** Give the stack its own
   S3 profile and channel if you want its shutdown notices separated from dev's.
 
