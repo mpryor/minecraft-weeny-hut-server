@@ -3,9 +3,9 @@ name: Publish modpack
 on:
   push:
     branches: [master]
-    paths: ['modpack/**']
+    paths: ['modpack/**', 'catalog/**']
   pull_request:
-    paths: ['modpack/**']
+    paths: ['modpack/**', 'catalog/**']
   workflow_dispatch:
 
 permissions:
@@ -40,7 +40,17 @@ jobs:
             echo "::error::'packwiz refresh' produced changes. Run it locally and commit the result."
             exit 1
           fi
-          echo "Both packs are consistent."
+          echo "All three packs are consistent."
+
+      # A mod's rationale can't live in its .pw.toml — `packwiz update` rewrites
+      # those files from a Go struct and drops comments and unknown keys. The
+      # catalog holds it instead, and this keeps the two from drifting apart.
+      - name: Check catalog matches the packs
+        run: |
+          if ! python3 scripts/check-catalog.py; then
+            echo "::error::catalog/ is out of sync with modpack/. See the errors above."
+            exit 1
+          fi
 
   deploy:
     needs: verify

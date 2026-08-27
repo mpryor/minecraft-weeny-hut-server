@@ -1,0 +1,379 @@
+# Mod catalog — prod
+#
+# Why this file exists: packwiz rewrites mods/*.pw.toml from a Go struct on
+# `packwiz update`, silently discarding comments and unknown keys, so a mod's
+# rationale cannot live inline. This catalog is kept outside the pack directory
+# so packwiz never sees it, and CI enforces that it stays 1:1 with the pack.
+#
+# One [<slug>] table per modpack/prod/mods/<slug>.pw.toml.
+#   description - what the mod does (from Modrinth)
+#   category    - Modrinth categories
+#   side        - mirrors the pack's `side` field
+#   reason      - why WE added it. TODO means nobody has written it down yet.
+#
+# Regenerate nothing automatically: edit reasons by hand, they are the point.
+
+[animal_feeding_trough]
+name = "Animal Feeding Trough"
+description = "Mobs self feed with feeding trough"
+category = ["adventure", "mobs", "utility"]
+side = "both"
+reason = "TODO: document why this was added."
+
+[appleskin]
+name = "AppleSkin"
+description = "Food/hunger-related HUD improvements"
+category = ["food", "utility"]
+side = "both"
+reason = "TODO: document why this was added."
+
+[architectury-api]
+name = "Architectury API"
+description = "An intermediary api aimed to ease developing multiplatform mods."
+category = ["library"]
+side = "both"
+reason = "Required by animal_feeding_trough."
+
+[ash-api]
+name = "Ash API"
+description = "An abstraction layer between Fabric and NeoForge"
+category = ["library"]
+side = "both"
+reason = "Required by flourish."
+
+[balm]
+name = "Balm"
+description = "Abstraction Layer for Multi-Loader Mods"
+category = ["library"]
+side = "both"
+reason = "Required by waystones."
+
+[carry-on]
+name = "Carry On"
+description = "Carry On allows you to pick up Tile Entities and Mobs and carry them around!"
+category = ["game-mechanics", "storage", "transportation"]
+side = "both"
+reason = "TODO: document why this was added."
+
+[cloth-config]
+name = "Cloth Config API"
+description = "Configuration Library for Minecraft Mods"
+category = ["library"]
+side = "both"
+reason = "Required by yungs-better-desert-temples, yungs-better-dungeons, yungs-better-end-island, yungs-better-jungle-temples, yungs-better-mineshafts, yungs-better-nether-fortresses, yungs-better-ocean-monuments, yungs-better-strongholds, yungs-better-witch-huts, yungs-bridges, yungs-extras."
+
+[clumps]
+name = "Clumps"
+description = "Clumps XP orbs together to reduce lag"
+category = ["storage", "utility"]
+side = "both"
+reason = "TODO: document why this was added."
+
+[collective]
+name = "Collective"
+description = "🎓 Collective is a shared library with common code for all of Serilum's mods."
+category = ["library"]
+side = "both"
+reason = "Required by double-doors."
+
+[comforts]
+name = "Comforts"
+description = "Adds sleeping bags and hammocks for, respectively, portability and turning day to night, without setting new spawns. Comes in 16 different colors!"
+category = ["adventure", "decoration"]
+side = "both"
+reason = "TODO: document why this was added."
+
+[coroutil]
+name = "CoroUtil"
+description = "Shared library mod for Corosus's mods"
+category = ["library"]
+side = "both"
+reason = "Required by what-are-they-up-to."
+
+[create-fabric]
+name = "Create Fabric"
+description = "Building Tools and Aesthetic Technology"
+category = ["decoration", "equipment", "technology"]
+side = "both"
+reason = "TODO: document why this was added."
+
+[cristel-lib]
+name = "Cristel Lib"
+description = "A Library mod for easy structure config and runtime datapacks."
+category = ["library", "worldgen"]
+side = "both"
+reason = "Required by towns-and-towers."
+
+[dcintegration]
+name = "Discord Integration"
+description = "This mod links your server chat with a channel on your discord server"
+category = ["management", "social", "utility"]
+side = "server"
+reason = "TODO: document why this was added."
+
+[death-finder]
+name = "Death Finder"
+description = "Deaths happen. Finding your items should not be the hard part."
+category = ["game-mechanics", "utility"]
+side = "both"
+reason = "TODO: document why this was added."
+
+[deeperdarker]
+name = "Deeper and Darker"
+description = "A Minecraft mod which features more blocks, items, armors, and hidden mysteries to complement the Deep Dark biome."
+category = ["adventure", "mobs", "worldgen"]
+side = "both"
+reason = "TODO: document why this was added."
+
+[double-doors]
+name = "Double Doors"
+description = "🚪 Multiple identical double doors, trapdoors and fence gates can be opened simultaneously."
+category = ["game-mechanics", "utility"]
+side = "server"
+reason = "TODO: document why this was added."
+
+[fabric-api]
+name = "Fabric API"
+description = "Lightweight and modular API providing common hooks and intercompatibility measures utilized by mods using the Fabric toolchain."
+category = ["library"]
+side = "both"
+reason = "Required by appleskin, architectury-api, ash-api, balm, clumps, comforts, create-fabric, cristel-lib, dcintegration, death-finder, deeperdarker, forge-config-api-port, ledger, open-parties-and-claims, owo-lib, puzzles-lib, xp-storage, xp-storage-trinkets, yungs-api, yungs-better-desert-temples, yungs-better-dungeons, yungs-better-end-island, yungs-better-jungle-temples, yungs-better-mineshafts, yungs-better-nether-fortresses, yungs-better-ocean-monuments, yungs-better-strongholds, yungs-better-witch-huts, yungs-bridges, yungs-extras."
+
+[fabric-language-kotlin]
+name = "Fabric Language Kotlin"
+description = "This is a mod that enables usage of the Kotlin programming language for Fabric mods."
+category = ["library"]
+side = "both"
+reason = "Required by ledger."
+
+[fallingtree]
+name = "FallingTree"
+description = "Break down your trees by only cutting one piece of it"
+category = ["utility"]
+side = "both"
+reason = "TODO: document why this was added."
+
+[ferrite-core]
+name = "FerriteCore"
+description = "Memory usage optimizations"
+category = ["optimization", "utility"]
+side = "both"
+reason = "TODO: document why this was added."
+
+[flourish]
+name = "Flourish"
+description = "Use bonemeal to spread small flowers."
+category = ["game-mechanics", "utility"]
+side = "both"
+reason = "TODO: document why this was added."
+
+[forge-config-api-port]
+name = "Forge Config API Port"
+description = "NeoForge's & Forge's config systems provided to other modding ecosystems. Designed for a multiloader architecture."
+category = ["library"]
+side = "both"
+reason = "Required by death-finder, open-parties-and-claims, puzzles-lib."
+
+[ledger]
+name = "Ledger"
+description = "A serverside logging mod"
+category = ["management", "utility"]
+side = "server"
+reason = "TODO: document why this was added."
+
+[lithium]
+name = "Lithium"
+description = "No-compromises game logic optimization mod, useful for both single-player games and multi-player servers."
+category = ["optimization"]
+side = "both"
+reason = "TODO: document why this was added."
+
+[lmft]
+name = "Load My F***ing Tags"
+description = "Prevents Incorrect Tag Entries from breaking an entire Tag"
+category = ["cursed", "utility"]
+side = "server"
+reason = "TODO: document why this was added."
+
+[memoryleakfix]
+name = "Memory Leak Fix"
+description = "A mod that fixes random memory leaks for both the client and server"
+category = ["optimization"]
+side = "both"
+reason = "TODO: document why this was added."
+
+[modernfix]
+name = "ModernFix"
+description = "All-in-one mod that improves performance, reduces memory usage, and fixes many bugs. Compatible with all your favorite performance mods!"
+category = ["optimization", "utility"]
+side = "both"
+reason = "TODO: document why this was added."
+
+[open-parties-and-claims]
+name = "Open Parties and Claims"
+description = "Adds the ability to claim chunks and make player parties, integrates with Xaero's Minimap and World Map"
+category = ["library", "utility"]
+side = "both"
+reason = "TODO: document why this was added."
+
+[owo-lib]
+name = "oωo (owo-lib)"
+description = "A general utility, GUI and config library for modding on Fabric and Quilt"
+category = ["library"]
+side = "both"
+reason = "Required by deeperdarker."
+
+[puzzles-lib]
+name = "Puzzles Lib"
+description = "Why is it called Puzzles? That's the puzzle."
+category = ["library"]
+side = "both"
+reason = "Required by death-finder."
+
+[sleep]
+name = "Sleep"
+description = "Change the amount of players to skip the night - Simple way to customize sleep! [sleep warp, displays sleeping players & more]"
+category = ["adventure", "game-mechanics", "social"]
+side = "both"
+reason = "TODO: document why this was added."
+
+[towns-and-towers]
+name = "Towns and Towers"
+description = "Spice up your world with new villages, pillager outposts, and even new ships!"
+category = ["adventure", "worldgen"]
+side = "both"
+reason = "TODO: document why this was added."
+
+[trinkets]
+name = "Trinkets"
+description = "A data-driven accessory mod"
+category = ["equipment", "library", "utility"]
+side = "both"
+reason = "Required by xp-storage-trinkets."
+
+[universal-graves]
+name = "Universal Graves"
+description = "Customisable grave mod for Fabric!"
+category = ["game-mechanics", "storage", "utility"]
+side = "server"
+reason = "TODO: document why this was added."
+
+[unloaded-activity]
+name = "Unloaded Activity"
+description = "Simulates blocks and entities to catch up after being unloaded for a period of time."
+category = ["game-mechanics", "optimization", "utility"]
+side = "server"
+reason = "Simulates activity in unloaded chunks. Pinned to 0.6.3 — 0.7.0 ships an access widener that collides with Create's bundled dripstone_fluid_lib and prevents server boot."
+
+[waystones]
+name = "Waystones"
+description = "Teleport from waystone to waystone or craft magical scrolls to warp."
+category = ["adventure", "magic", "transportation"]
+side = "both"
+reason = "TODO: document why this was added."
+
+[what-are-they-up-to]
+name = "What Are They Up To (Watut)"
+description = "Lets you see if players are typing, in a GUI, idle, with cool ingame visuals"
+category = ["social", "utility"]
+side = "both"
+reason = "TODO: document why this was added."
+
+[xp-storage]
+name = "XP Storage"
+description = "A mod that lets you store your experience in multiple ways!"
+category = ["storage"]
+side = "both"
+reason = "Required by xp-storage-trinkets."
+
+[xp-storage-trinkets]
+name = "XP Storage - Trinkets"
+description = "An extension mod to add Trinkets support to XP Storage"
+category = ["equipment", "storage"]
+side = "both"
+reason = "TODO: document why this was added."
+
+[yungs-api]
+name = "YUNG's API"
+description = "Library mod for YUNG's mods."
+category = ["library", "worldgen"]
+side = "both"
+reason = "Required by yungs-better-desert-temples, yungs-better-dungeons, yungs-better-end-island, yungs-better-jungle-temples, yungs-better-mineshafts, yungs-better-nether-fortresses, yungs-better-ocean-monuments, yungs-better-strongholds, yungs-better-witch-huts, yungs-bridges, yungs-extras."
+
+[yungs-better-desert-temples]
+name = "YUNG's Better Desert Temples"
+description = "A complete redesign of Minecraft's desert temples!"
+category = ["adventure", "decoration", "worldgen"]
+side = "server"
+reason = "TODO: document why this was added."
+
+[yungs-better-dungeons]
+name = "YUNG's Better Dungeons"
+description = "A complete redesign of Minecraft's dungeons!"
+category = ["adventure", "decoration", "worldgen"]
+side = "server"
+reason = "TODO: document why this was added."
+
+[yungs-better-end-island]
+name = "YUNG's Better End Island"
+description = "An overhaul of the main End Island where the dragon fight takes place!"
+category = ["adventure", "decoration", "worldgen"]
+side = "server"
+reason = "TODO: document why this was added."
+
+[yungs-better-jungle-temples]
+name = "YUNG's Better Jungle Temples"
+description = "A complete redesign of Minecraft's jungle temples!"
+category = ["adventure", "decoration", "worldgen"]
+side = "server"
+reason = "TODO: document why this was added."
+
+[yungs-better-mineshafts]
+name = "YUNG's Better Mineshafts"
+description = "A long-awaited and much-needed abandoned mineshaft overhaul!"
+category = ["adventure", "decoration", "worldgen"]
+side = "server"
+reason = "TODO: document why this was added."
+
+[yungs-better-nether-fortresses]
+name = "YUNG's Better Nether Fortresses"
+description = "A complete redesign of Minecraft's Nether fortresses!"
+category = ["adventure", "decoration", "worldgen"]
+side = "server"
+reason = "TODO: document why this was added."
+
+[yungs-better-ocean-monuments]
+name = "YUNG's Better Ocean Monuments"
+description = "A complete redesign of Minecraft's ocean monuments!"
+category = ["adventure", "decoration", "worldgen"]
+side = "server"
+reason = "TODO: document why this was added."
+
+[yungs-better-strongholds]
+name = "YUNG's Better Strongholds"
+description = "A complete redesign of Minecraft's strongholds!"
+category = ["adventure", "decoration", "worldgen"]
+side = "server"
+reason = "TODO: document why this was added."
+
+[yungs-better-witch-huts]
+name = "YUNG's Better Witch Huts"
+description = "Adds overhauled witch huts to swamps!"
+category = ["adventure", "decoration", "worldgen"]
+side = "server"
+reason = "TODO: document why this was added."
+
+[yungs-bridges]
+name = "YUNG's Bridges"
+description = "Adds beautiful naturally generated bridges throughout the world!"
+category = ["adventure", "decoration", "worldgen"]
+side = "server"
+reason = "TODO: document why this was added."
+
+[yungs-extras]
+name = "YUNG's Extras"
+description = "Extra structures, features, and vanilla+ content suitable for any modpack!"
+category = ["adventure", "decoration", "worldgen"]
+side = "server"
+reason = "TODO: document why this was added."
+
