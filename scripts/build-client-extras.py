@@ -120,7 +120,12 @@ def main():
                     add(f"{HOST_MODPACK}/{sub}/{rel.as_posix()}", f.read_bytes())
 
     size = out.stat().st_size
-    print(f"\n{out.relative_to(ROOT)}  ({size/1024/1024:.1f} MiB, {len(written)} entries)")
+    # -o may point outside the repo (CI writes to /tmp), so relative_to can fail
+    try:
+        shown = out.relative_to(ROOT)
+    except ValueError:
+        shown = out
+    print(f"\n{shown}  ({size/1024/1024:.1f} MiB, {len(written)} entries)")
     for a in written:
         print(f"  {a}")
     return 0
