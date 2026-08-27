@@ -395,8 +395,15 @@ reason = "Added 2026-08-27 for client parity with the prod Modrinth profile."
 name = "Sodium"
 description = "A high-performance rendering engine replacement for Minecraft, which greatly improves frame rates and reduces micro-stutter."
 category = ["optimization"]
-side = "both"
-reason = "Required by iris."
+side = "client"
+reason = """Required by iris. MUST stay side = "client": Sodium registers a \
+neoforgespi.earlywindow.GraphicsBootstrapper service, which FML invokes from \
+ImmediateWindowHandler.load() during ModLauncher bootstrap — before any Dist \
+filtering runs. On a dedicated server that reaches LWJGL, which is not present, \
+and the server dies with NoClassDefFoundError: org/lwjgl/Version before the mod \
+list is even read. Setting it to "both" crash-looped weenyhut-forge-dev on \
+2026-08-27. Iris's own sodium dependency is side = "CLIENT", so the server does \
+not need it. Players must get Sodium out-of-band; it will not reach AutoModpack."""
 
 [sophisticated-backpacks]
 name = "Sophisticated Backpacks"

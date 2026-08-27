@@ -558,6 +558,34 @@ Resources:
           - sts:AssumeRole
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceforEC2Role
+      # UserData runs with `bash -xe`, so the `aws s3 cp` of the shell profile
+      # aborts the whole script on failure -- taking the autoshutdown install
+      # and its crontab entry with it, silently. The instance then runs until
+      # somebody notices the bill. The two original stacks only work because
+      # AdministratorAccess was attached to their roles by hand, outside this
+      # template; a stack created fresh from it got no S3 access and no
+      # autoscaling/ecs access, so autoshutdown could neither install nor fire.
+      # Resource is '*' on the autoscaling and ecs statements deliberately:
+      # the ASG and the ECS service both sit downstream of this role
+      # (EcsService -> ECSCapacityProvider -> AutoScalingGroup ->
+      # LaunchConfiguration -> InstanceProfile -> InstanceRole), so naming them
+      # here is a circular reference CloudFormation rejects. The action list is
+      # the constraint instead -- four calls, exactly what scripts/autoshutdown
+      # makes.
+      Policies:
+        - PolicyName: autoshutdown
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action: s3:GetObject
+                Resource: !Sub 'arn:aws:s3:::weenyhut/${S3ProfileName}'
+              - Effect: Allow
+                Action:
+                  - autoscaling:SetInstanceProtection
+                  - autoscaling:SetDesiredCapacity
+                  - ecs:UpdateService
+                Resource: '*'
 
   InstanceProfile:
     Type: AWS::IAM::InstanceProfile
