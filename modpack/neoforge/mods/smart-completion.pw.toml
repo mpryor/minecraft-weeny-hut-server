@@ -1,6 +1,6 @@
 name = "Smart Completion"
 filename = "smartcompletion-1.21-neoforge-2.1.0.jar"
-side = "both"
+side = "client"
 
 [download]
 url = "https://cdn.modrinth.com/data/Go1Kxy32/versions/sq7UZs6c/smartcompletion-1.21-neoforge-2.1.0.jar"

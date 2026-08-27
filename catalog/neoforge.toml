@@ -108,7 +108,7 @@ reason = "Direct carry-over from the prod pack (see NEOFORGE-MIGRATION.md)."
 name = "Chat Heads"
 description = "See who you're chatting with!"
 category = ["decoration", "social"]
-side = "both"
+side = "client"
 reason = "Added 2026-08-27 for client parity with the prod Modrinth profile."
 
 [cloth-config]
@@ -248,7 +248,7 @@ reason = "Direct carry-over from the prod pack (see NEOFORGE-MIGRATION.md)."
 name = "Freecam"
 description = "A highly customizable freecam mod."
 category = ["utility"]
-side = "both"
+side = "client"
 reason = "Added 2026-08-27 for client parity with the prod Modrinth profile."
 
 [geckolib]
@@ -262,14 +262,14 @@ reason = "Added 2026-08-27. Animation library used by several content mods, and 
 name = "Inventory Profiles Next"
 description = "Take control over your inventory. Sort. Move matching Items. Throw all. Locked slots. Gear sets! And much more."
 category = ["storage", "utility"]
-side = "both"
+side = "client"
 reason = "Added 2026-08-27 for client parity with the prod Modrinth profile."
 
 [iris]
 name = "Iris Shaders"
 description = "A modern shader pack loader for Minecraft intended to be compatible with existing OptiFine shader packs"
 category = ["decoration", "optimization"]
-side = "both"
+side = "client"
 reason = "Added 2026-08-27 for client parity with the prod Modrinth profile."
 
 [jade]
@@ -290,14 +290,14 @@ reason = "Replaces fabric-language-kotlin."
 name = "LambDynamicLights - Dynamic Lights"
 description = "Adds dynamic lights to Minecraft as the most feature-complete and optimized dynamic lighting mod."
 category = ["adventure", "decoration", "utility"]
-side = "both"
+side = "client"
 reason = "Added 2026-08-27 for client parity with the prod Modrinth profile."
 
 [libipn]
 name = "libIPN"
 description = "Inventory Profiles Next GUI/Config library"
 category = ["library"]
-side = "both"
+side = "client"
 reason = "Required by inventory-profiles-next."
 
 [lithium]
@@ -325,7 +325,7 @@ reason = "Direct carry-over from the prod pack (see NEOFORGE-MIGRATION.md)."
 name = "Mouse Tweaks"
 description = "Enhances inventory management by adding various functions to the mouse buttons."
 category = ["storage", "utility"]
-side = "both"
+side = "client"
 reason = "Added 2026-08-27 for client parity with the prod Modrinth profile."
 
 [open-parties-and-claims]
@@ -388,7 +388,7 @@ reason = "Direct carry-over from the prod pack (see NEOFORGE-MIGRATION.md)."
 name = "Smart Completion"
 description = "Better Completion for Minecraft Commands"
 category = ["utility"]
-side = "both"
+side = "client"
 reason = "Added 2026-08-27 for client parity with the prod Modrinth profile."
 
 [sodium]
