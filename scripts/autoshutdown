@@ -6,6 +6,24 @@
 
 COUNT_FILE=/tmp/player-count
 
+# An unset MAX_MINUTES_IDLE does not disable the idle check, it inverts it.
+# `tail -n ""` errors, so NO_RUNS is 0, and `[[ 0 -ge "" ]]` is TRUE -- [[ ]]
+# reads the empty string as 0 in arithmetic context. The threshold is then met
+# by the first sample RCON answers, a few minutes after boot rather than
+# MAX_MINUTES_IDLE idle minutes later. Default it to the same value tfvars does.
+MAX_MINUTES_IDLE="${MAX_MINUTES_IDLE:-20}"
+
+# ECS_SERVICE cannot be guessed, and an empty one is worse than none: the ASG
+# goes to zero while `update-service --service ""` fails, so the service keeps
+# asking for its task, ECS scales the ASG back up, and the replacement instance
+# shuts itself down the same way. Refuse to start rather than loop.
+for _var in INSTANCE_ID ECS_CLUSTER ECS_SERVICE AUTOSCALING_GROUP; do
+    if [ -z "${!_var:-}" ]; then
+        echo "$(date -u +%FT%TZ) $_var is unset; refusing to run"
+        exit 1
+    fi
+done
+
 # Match on the image rather than `docker ps | grep -i minecraft`, which also
 # depends on the container's generated name.
 MINECRAFT_ID=$(docker ps --format '{{.ID}} {{.Image}}' \
