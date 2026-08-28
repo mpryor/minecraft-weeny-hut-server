@@ -31,7 +31,16 @@ so the server and all clients resolve byte-identical jars.
   pre-launch command, so mods sync on every launch.
 
 `side` controls who gets what: `both` installs everywhere, `server` is skipped
-on clients. Sides were derived from each project's declared `client_side` /
+on clients, `client` is skipped on the server.
+
+**Never set a client-only mod to `both` to get it onto players.** NeoForge has
+no per-mod dist gate -- it loads every jar in `mods/` and only strips client-only
+*classes* -- so a client mod runs its constructor on a dedicated server and takes
+it down if that constructor touches anything client-only. This crash-looped the
+NeoForge server twice on 2026-08-27. Client mods reach players two other ways:
+`packwiz-installer` defaults to `-s client`, so Prism gets them; and
+`scripts/build-client-extras.py` packages them for AutoModpack. See
+[NEOFORGE-MIGRATION.md](NEOFORGE-MIGRATION.md). Sides were derived from each project's declared `client_side` /
 `server_side` support on Modrinth. At time of writing: 35 `both`, 17 `server`,
 none client-only.
 
@@ -105,6 +114,22 @@ deliberate prod pins — see below.
   This was pinned by hand in the old `ModrinthProjects` list while every other
   mod floated, so it is assumed deliberate — **the reason was never recorded.**
   Confirm before promoting a newer version over it.
+
+## Client-only content (neoforge)
+
+`client-extras/neoforge/` holds files served to players but never installed on
+the server -- currently the shader pack. `scripts/build-client-extras.py neoforge`
+bundles it with every `side = "client"` mod into a zip that the container unpacks
+into AutoModpack's host directory. CI builds it on each publish; the zip is
+gitignored so it cannot drift from the pack.
+
+```bash
+python3 scripts/build-client-extras.py neoforge   # writes modpack/neoforge-client-extras.zip
+```
+
+Drop a shader or resource pack into `client-extras/neoforge/shaderpacks/` (or
+`resourcepacks/`) and it ships on the next publish. The top-level `config/`
+entry the script writes into the zip is load-bearing -- see NEOFORGE-MIGRATION.md.
 
 ## Applying a published pack to a server
 

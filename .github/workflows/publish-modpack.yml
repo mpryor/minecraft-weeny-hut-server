@@ -52,6 +52,26 @@ jobs:
             exit 1
           fi
 
+      # The real build runs in the deploy job, which is skipped on pull requests
+      # -- so without this a broken build script would only surface at publish
+      # time, after review. Also revalidates every client mod's hash against its
+      # .pw.toml, and fails if the generic pack's content base stops resolving to
+      # the zip root (see scripts/build-client-extras.py).
+      - name: Build client-extras pack
+        run: |
+          python3 scripts/build-client-extras.py neoforge -o /tmp/extras.zip
+          python3 - <<'EOF'
+          import sys, zipfile
+          names = zipfile.ZipFile("/tmp/extras.zip").namelist()
+          if "config/.generic-pack-anchor" not in names:
+              sys.exit("::error::anchor missing; base would resolve below the zip root")
+          stray = [n for n in names
+                   if not n.startswith(("config/", "automodpack/host-modpack/main/"))]
+          if stray:
+              sys.exit(f"::error::entries outside the host-modpack tree: {stray}")
+          print(f"ok: {len(names)} entries, anchor present")
+          EOF
+
   deploy:
     needs: verify
     if: github.ref == 'refs/heads/master' && github.event_name != 'pull_request'
@@ -61,6 +81,18 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
+
+      # Client-only mods never reach /data/mods (the image runs
+      # packwiz-installer -s server), and AutoModpack only serves /data/mods, so
+      # players relying on AutoModpack would get none of them. This zip carries
+      # them, plus shaderpacks, into automodpack/host-modpack/main via the
+      # container's GENERIC_PACKS handling. Built here rather than committed so
+      # it can never drift from the pack it is derived from.
+      - name: Build client-extras generic pack
+        run: |
+          python3 scripts/build-client-extras.py neoforge
+          unzip -l modpack/neoforge-client-extras.zip
+
       # modpack/ becomes the site root, so the packs resolve at
       #   <pages-url>/dev/pack.toml  and  <pages-url>/prod/pack.toml
       - uses: actions/upload-pages-artifact@v3
