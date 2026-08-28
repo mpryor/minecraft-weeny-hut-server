@@ -1,20 +1,63 @@
 #!/bin/bash
 
-MINECRAFT_ID=$(docker ps | grep -i minecraft | awk '{print $1}')
+# Shuts the stack down after MAX_MINUTES_IDLE consecutive minutes with no
+# players. Run from root's crontab once a minute; environment comes from
+# ~/.profile, which UserData pulls from S3.
+
+COUNT_FILE=/tmp/player-count
+
+# Match on the image rather than `docker ps | grep -i minecraft`, which also
+# depends on the container's generated name.
+MINECRAFT_ID=$(docker ps --format '{{.ID}} {{.Image}}' \
+    | awk '/itzg\/minecraft-server/ {print $1; exit}')
+
+if [ -z "$MINECRAFT_ID" ]; then
+    echo "$(date -u +%FT%TZ) no minecraft container running; nothing to do"
+    exit 0
+fi
 
 if [ ! -f /tmp/serverstarted ]; then
-    docker logs $MINECRAFT_ID | grep -i "RCON running" >/dev/null
-    if [ $? -eq 0 ]; then
-        curl -X POST -H "Content-Type: application/json" -H "Authorization: Bot ${DISCORD_TOKEN}" "https://discord.com/api/v10/channels/${CHANNEL_ID}/messages" -d "{\"content\": \"Server: ${STACK_NAME} is now running!\"}"
+    if docker logs "$MINECRAFT_ID" 2>&1 | grep -qi "RCON running"; then
+        curl -sS -X POST -H "Content-Type: application/json" -H "Authorization: Bot ${DISCORD_TOKEN}" "https://discord.com/api/v10/channels/${CHANNEL_ID}/messages" -d "{\"content\": \"Server: ${STACK_NAME} is now running!\"}" >/dev/null
         touch /tmp/serverstarted
     fi
 fi
 
-docker exec $MINECRAFT_ID rcon-cli list | awk '{print $3}' >> /tmp/player-count
-NO_RUNS=$(cat /tmp/player-count | tail -$MAX_MINUTES_IDLE | grep -i 0 | wc -l)
-if [[ $NO_RUNS -gt $(($MAX_MINUTES_IDLE - 1)) ]]; then
-    curl -X POST -H "Content-Type: application/json" -H "Authorization: Bot ${DISCORD_TOKEN}" "https://discord.com/api/v10/channels/${CHANNEL_ID}/messages" -d "{\"content\": \"Players have been logged off for ${MAX_MINUTES_IDLE} minutes, the server: ${STACK_NAME} is shutting down. Use \`/mcstart ${STACK_NAME}\` to start the server back up!\"}"
+# `rcon-cli list` answers with TWO lines -- the summary, then an ANSI colour
+# reset:
+#
+#     There are 0 of a max of 20 players online:
+#     \e[0m
+#
+# Piping that straight through `awk '{print $3}'` appended one count and one
+# blank line per run, so `tail -$MAX_MINUTES_IDLE` only ever covered half the
+# intended window and the idle count could never reach the threshold. Strip the
+# escape codes and read the count off the summary line alone.
+PLAYERS=$(docker exec "$MINECRAFT_ID" rcon-cli list 2>/dev/null \
+    | sed 's/\x1b\[[0-9;]*m//g' \
+    | awk '/players online/ {print $3; exit}')
+
+# RCON refuses connections while the server is still booting or shutting down.
+# That is not evidence the server is idle, so record nothing rather than a
+# value that would be miscounted.
+if ! [[ "$PLAYERS" =~ ^[0-9]+$ ]]; then
+    echo "$(date -u +%FT%TZ) rcon unavailable; not sampling this minute"
+    exit 0
+fi
+
+echo "$PLAYERS" >> "$COUNT_FILE"
+# Bound the file; only the last MAX_MINUTES_IDLE samples are ever read.
+tail -n 1000 "$COUNT_FILE" > "$COUNT_FILE.tmp" && mv "$COUNT_FILE.tmp" "$COUNT_FILE"
+
+# -x anchors the match to the whole line. The old `grep -i 0` matched any line
+# *containing* a zero, so 10, 20 or 30 players online counted as idle.
+NO_RUNS=$(tail -n "$MAX_MINUTES_IDLE" "$COUNT_FILE" | grep -cx '0')
+
+echo "$(date -u +%FT%TZ) players=$PLAYERS idle_samples=$NO_RUNS/$MAX_MINUTES_IDLE"
+
+if [[ $NO_RUNS -ge $MAX_MINUTES_IDLE ]]; then
+    curl -sS -X POST -H "Content-Type: application/json" -H "Authorization: Bot ${DISCORD_TOKEN}" "https://discord.com/api/v10/channels/${CHANNEL_ID}/messages" -d "{\"content\": \"Players have been logged off for ${MAX_MINUTES_IDLE} minutes, the server: ${STACK_NAME} is shutting down. Use \`/mcstart ${STACK_NAME}\` to start the server back up!\"}" >/dev/null
     /usr/local/bin/aws autoscaling set-instance-protection --instance-id $INSTANCE_ID --auto-scaling-group-name $AUTOSCALING_GROUP --no-protected-from-scale-in
-    /usr/local/bin/aws ecs update-service --cluster $ECS_CLUSTER --service $ECS_SERVICE  --desired-count 0
+    /usr/local/bin/aws ecs update-service --cluster $ECS_CLUSTER --service $ECS_SERVICE --desired-count 0
     /usr/local/bin/aws autoscaling set-desired-capacity --auto-scaling-group-name $AUTOSCALING_GROUP --desired-capacity 0
 fi
