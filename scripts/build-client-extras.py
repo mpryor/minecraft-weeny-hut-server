@@ -15,9 +15,18 @@ This builds a zip that itzg's GENERIC_PACKS handling unpacks into /data *after*
 packwiz has run, placing client content under automodpack/host-modpack/main/,
 where AutoModpack serves it to clients and the server never loads it.
 
+It also carries server-side config from server-config/<env>/, which lands at
+the zip root and so is copied straight into /data/config -- the one place a
+server-side mod's configuration can come from, since packwiz installs mods and
+nothing else. That is how sdlink gets its config: the file holds ${CFG_*}
+placeholders that the container substitutes from the task definition before the
+server starts, so a secret never has to be committed to a pack that publishes
+to GitHub Pages.
+
 Zip layout:
 
     config/.generic-pack-anchor            <- see ANCHOR below
+    config/<...>                           <- server-config/<env>/, to /data/config
     automodpack/host-modpack/main/mods/*.jar
     automodpack/host-modpack/main/shaderpacks/*.zip
 
@@ -45,6 +54,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 HOST_MODPACK = "automodpack/host-modpack/main"
 ANCHOR_PATH = "config/.generic-pack-anchor"
+SERVER_CONFIG = "config"
 ANCHOR_TEXT = (
     "Pins the generic pack's content base at the zip root.\n"
     "start-setupModpack finds the shallowest mods/plugins/config directory and\n"
@@ -109,6 +119,18 @@ def main():
         for filename, url, expected, fmt in mods:
             print(f"  fetching {filename}")
             add(f"{HOST_MODPACK}/mods/{filename}", fetch(url, expected, fmt))
+
+        # Server-side config goes to the zip root, not under host-modpack: the
+        # container copies the root into /data, so these reach /data/config
+        # where the server's own mods read them. The client-extras loop below
+        # puts its config under host-modpack instead, which AutoModpack ships
+        # to players -- same filename, opposite destination, so keep them apart.
+        server_config = ROOT / "server-config" / env
+        if server_config.is_dir():
+            for f in sorted(server_config.rglob("*")):
+                if f.is_file():
+                    rel = f.relative_to(server_config)
+                    add(f"{SERVER_CONFIG}/{rel.as_posix()}", f.read_bytes())
 
         for sub in ("shaderpacks", "resourcepacks", "config"):
             src = extras / sub
