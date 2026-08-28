@@ -96,6 +96,11 @@ hash = "d901f874a1e09747b8d0d072c38c426eceead1f29c8ba36680f8f0082996b152"
 metafile = true
 
 [[files]]
+file = "mods/craterlib.pw.toml"
+hash = "baad81133f5263fb4a8f88a052847766308a5ce1a0bc3cc26db429564e3d5274"
+metafile = true
+
+[[files]]
 file = "mods/create-diesel-generators.pw.toml"
 hash = "456f66abd180b3f5765473cda5e8acb1a6ea8b15b7ee34442be9a7af414cfc63"
 metafile = true
@@ -263,6 +268,11 @@ metafile = true
 [[files]]
 file = "mods/rei.pw.toml"
 hash = "21388a8519fbba93d4663a40bb163932855213ec47f41af18c1d3a4a1e2ada93"
+metafile = true
+
+[[files]]
+file = "mods/sdlink.pw.toml"
+hash = "51a0eea1834c166d9bed01170f686741863b6e16a49b71d219b69ecbc6206807"
 metafile = true
 
 [[files]]
