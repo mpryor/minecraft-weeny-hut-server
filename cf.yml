@@ -531,7 +531,11 @@ Resources:
           echo "export ECS_CLUSTER=${AWS::StackName}-cluster" >> ~/.profile
           echo "export AUTOSCALING_GROUP=${AWS::StackName}-asg" >> ~/.profile
           echo "export ECS_SERVICE=${AWS::StackName}-ecs-service" >> ~/.profile
-          sudo curl -o /usr/local/bin/autoshutdown https://raw.githubusercontent.com/mpryor/minecraft-weeny-hut-server/refs/heads/master/scripts/autoshutdown
+          # -f so an HTTP error fails the download instead of writing the error
+          # page to disk and chmod +x'ing it. UserData runs with -e, so a genuine
+          # failure here aborts the boot loudly rather than installing a stub that
+          # silently never shuts the instance down.
+          sudo curl -fsSL -o /usr/local/bin/autoshutdown https://raw.githubusercontent.com/mpryor/minecraft-weeny-hut-server/refs/heads/master/scripts/autoshutdown
           sudo chmod +x /usr/local/bin/autoshutdown
           echo "* * * * * source ~/.profile; /usr/local/bin/autoshutdown >> /var/log/autoshutdown 2>&1" | sudo crontab -
           
