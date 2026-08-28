@@ -389,7 +389,15 @@ name = "Smart Completion"
 description = "Better Completion for Minecraft Commands"
 category = ["utility"]
 side = "client"
-reason = "Added 2026-08-27 for client parity with the prod Modrinth profile."
+reason = """Added 2026-08-27 for client parity with the prod Modrinth profile. \
+PINNED to 1.8.14-beta.1 (KduFYu4t) because it must match Sodium's major line. \
+Sodium 0.8 renamed SodiumGameOptions to SodiumOptions; Iris mixes into that class \
+by name, so 1.8.12 (which targets the 0.6 name) attaches fine at startup and then \
+kills the client on world join with MixinPreProcessorException on \
+SodiumGameOptions$PerformanceSettings::useFogOcclusion. 1.8.14-beta.1 targets the \
+0.8 name. Iris declares versionRange "[0.6,)" on Sodium, so NeoForge does NOT \
+catch the mismatch at load time -- only Modrinth's pinned dependency does, and \
+packwiz does not read it. Bump Iris and Sodium together, or not at all."""
 
 [sodium]
 name = "Sodium"
@@ -403,7 +411,9 @@ filtering runs. On a dedicated server that reaches LWJGL, which is not present, 
 and the server dies with NoClassDefFoundError: org/lwjgl/Version before the mod \
 list is even read. Setting it to "both" crash-looped weenyhut-forge-dev on \
 2026-08-27. Iris's own sodium dependency is side = "CLIENT", so the server does \
-not need it. Players must get Sodium out-of-band; it will not reach AutoModpack."""
+not need it. Players get it through both client paths: packwiz-installer defaults \
+to -s client, and build-client-extras.py ships it to AutoModpack. PINNED to 0.8.12 \
+(S3DUMfBo) -- see [iris] for why the two versions are coupled."""
 
 [sophisticated-backpacks]
 name = "Sophisticated Backpacks"
