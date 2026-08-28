@@ -146,6 +146,13 @@ category = ["library"]
 side = "both"
 reason = "Required by what-are-they-up-to."
 
+[craterlib]
+name = "CraterLib"
+description = "A Universal Modding API and Utilities library"
+category = ["library"]
+side = "server"
+reason = "Required by sdlink. Scoped to server rather than both because sdlink is its only consumer here and sdlink does not load on clients."
+
 [create]
 name = "Create"
 description = "Aesthetic Technology that empowers the Player"
@@ -383,6 +390,13 @@ description = "Clean and Customizable. Alternative to Just Enough Items/JEI."
 category = ["utility"]
 side = "both"
 reason = "Added 2026-08-27 for client parity with the prod Modrinth profile."
+
+[sdlink]
+name = "Simple Discord Link"
+description = "A simple Minecraft -> Discord Chat Link bot with Whitelisting"
+category = ["social", "utility"]
+side = "server"
+reason = "Added 2026-08-28. Bidirectional Minecraft <-> Discord chat relay. Replaces dcintegration, which the prod pack uses but which has no 1.21.1 build (it skips straight from 1.21 to 1.21.3). Needs a bot token in config/simple-discord-link/sdlink.toml on the server volume -- the pack cannot carry it, see NEOFORGE-MIGRATION.md."
 
 [sleep]
 name = "Sleep"

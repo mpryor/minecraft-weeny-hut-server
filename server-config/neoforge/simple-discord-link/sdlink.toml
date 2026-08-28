@@ -1,0 +1,36 @@
+# sdlink's server-side configuration, delivered by the generic pack rather than
+# by packwiz -- packwiz installs mods, not config. See build-client-extras.py.
+#
+# This file is the source of truth. itzg's generic pack handling records a
+# manifest of everything it applied and deletes those files before re-applying,
+# so whenever this pack changes, the copy on the server volume is replaced by
+# this one. Settings changed in-game or edited on disk do not survive that.
+#
+# The CFG_ placeholders below are substituted inside the container after the
+# pack is unpacked and before the server starts (REPLACE_ENV_VARIABLES; values
+# come from the ECS task definition in the terraform repo). Nothing secret is
+# committed here: this pack publishes to GitHub Pages. The bot token arrives as
+# an ECS secret read from SSM Parameter Store at task start, and is never
+# written to this repo, to the pack, or to Terraform state.
+#
+# configVersion is deliberately 0 rather than sdlink's current 37.
+# SDLinkConfig.migrateConfig returns early when the file's version equals the
+# mod's, so a partial file pinned at the current version would never have its
+# missing keys filled in -- the mod would run against a config missing most of
+# its structure. Pinning 0 forces the migration path, which merges the values
+# below over the mod's own defaults and then rewrites the file with the real
+# version. That also keeps this file short: it carries what we set, not a
+# snapshot of every default that would drift on the next sdlink release.
+
+[general]
+enabled = true
+configVersion = 0
+
+[botConfig]
+botToken = "${CFG_SDLINK_BOT_TOKEN}"
+
+[channelsAndWebhooks]
+serverName = "${CFG_SDLINK_SERVER_NAME}"
+
+[channelsAndWebhooks.channels]
+chatChannelID = "${CFG_SDLINK_CHAT_CHANNEL_ID}"
