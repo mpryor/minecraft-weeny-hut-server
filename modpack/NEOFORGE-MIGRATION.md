@@ -170,6 +170,46 @@ unzip -l <mod>.jar | grep -E 'META-INF/services/(cpw\.mods\.modlauncher|net\.neo
 curl -s https://api.modrinth.com/v2/project/<slug> | jq '{client_side, server_side}'
 ```
 
+### Iris and Sodium are version-coupled
+
+**Bump the two together or not at all.** Iris mixes into Sodium's option class
+*by name*, and Sodium 0.8 renamed `SodiumGameOptions` to `SodiumOptions`. Iris
+1.8.12 (the newest *release* for NeoForge 1.21.1) targets the 0.6 name, so paired
+with Sodium 0.8.12 it loads cleanly, survives the whole startup, and then kills
+the client the moment you join a world:
+
+```
+MixinPreProcessorException: Attach error for
+  mixins.iris.compat.sodium.json:MixinRenderSectionManager from mod iris
+  -> GETFIELD -> SodiumGameOptions$PerformanceSettings::useFogOcclusion:Z
+  at SodiumWorldRenderer.initRenderer <- ClientPacketListener.handleLogin
+```
+
+Nothing catches this earlier. Iris declares `versionRange = "[0.6,)"` on Sodium
+in its `neoforge.mods.toml` — an open upper bound — so **NeoForge's own
+dependency check passes**. The accurate signal is Modrinth's pinned dependency
+(Iris 1.8.12 requires Sodium version `Pb3OXVqC` = 0.6.13 exactly), and packwiz
+does not read dependency pins. Startup only logs it as warnings, easy to miss:
+
+```
+@Mixin target net.caffeinemc.mods.sodium.client.gui.SodiumGameOptions was not found
+```
+
+Iris is therefore pinned to **1.8.14-beta.1**, which targets the 0.8 class name,
+against Sodium **0.8.12**. It is the only Iris build for NeoForge 1.21.1 that
+works with Sodium 0.8; the alternative was downgrading Sodium to 0.6.13. Iris was
+audited as the only mod in the pack referencing the removed class name.
+
+When bumping either, check the pair still agrees:
+
+```bash
+# Modrinth's pinned dependency is the real compatibility statement
+curl -s 'https://api.modrinth.com/v2/version/<iris-version-id>' | jq '.dependencies'
+# and confirm the mixin target matches the class Sodium actually ships
+unzip -p iris-*.jar 'net/irisshaders/iris/compat/sodium/mixin/MixinRenderSectionManager.class' \
+  | strings | grep -o 'Sodium[A-Za-z]*Options'
+```
+
 ### Shaderpacks
 
 `client-extras/neoforge/shaderpacks/` ships shader packs to players through the
