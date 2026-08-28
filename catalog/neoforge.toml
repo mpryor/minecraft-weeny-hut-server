@@ -195,6 +195,13 @@ category = ["adventure", "mobs", "worldgen"]
 side = "both"
 reason = "Direct carry-over from the prod pack (see NEOFORGE-MIGRATION.md)."
 
+[diesel-jetpack]
+name = "Diesel Jetpack"
+description = "Makes the Create Jetpack burn diesel from a fluid tank in your inventory instead of backtank air, with a fuel gauge HUD."
+category = ["equipment", "technology"]
+side = "both"
+reason = "Local build with no upstream — hand-ported from the Fabric 1.20.1 original to NeoForge 1.21.1 for this pack. Self-hosted from modpack/local-mods/, so its .pw.toml has no [update] block; see NEOFORGE-MIGRATION.md."
+
 [distanthorizons]
 name = "Distant Horizons"
 description = "Massively increase render distance without harming performance."

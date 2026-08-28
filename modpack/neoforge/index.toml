@@ -131,6 +131,11 @@ hash = "a9ecc4476d26e707189e9f988c19f22961c33dfd5e5b4db1dfd6f87c6a81c545"
 metafile = true
 
 [[files]]
+file = "mods/diesel-jetpack.pw.toml"
+hash = "568d7e0045dc72f99d61ba7c1982003b1c929c2b2ccd2dea5283b00e339225eb"
+metafile = true
+
+[[files]]
 file = "mods/distanthorizons.pw.toml"
 hash = "d5b9c23df79ef871a70032567db2512904251347bdf13da80fbb8b00a846a79a"
 metafile = true

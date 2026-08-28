@@ -225,11 +225,79 @@ own. `resourcepacks/` and `config/` alongside it work the same way.
 Polymer-based server mods (`universal-graves`, `taterzens`) are structurally
 unportable: Polymer is a Fabric-only framework.
 
-Two mods in the prod client profile are local builds with no upstream, so they
-cannot be pulled by packwiz and must be ported by hand:
-`diesel-jetpack-1.0.0.jar` and `hollowharvest-1.0.0.jar`. Both of their
-dependencies (Create Jetpack, Create: Diesel Generators, GeckoLib) now have
-NeoForge 1.21.1 builds in the pack, so the ports are viable.
+`hollowharvest-1.0.0.jar` is a local build in the prod client profile with no
+upstream, so packwiz cannot pull it and it still needs a hand port. Its
+dependency (GeckoLib) has a NeoForge 1.21.1 build in the pack, so the port is
+viable. `diesel-jetpack-1.0.0.jar` was in the same position and has now been
+ported — see below.
+
+### Diesel Jetpack — ported, and self-hosted
+
+`diesel-jetpack` is a local mod with no upstream that makes the Create Jetpack
+burn diesel out of a fluid tank in your inventory instead of backtank air, and
+draws a fuel gauge over the hotbar. The Fabric 1.20.1 source lives outside this
+repo at `~/projects/minecraft/diesel-jetpack`; the NeoForge 1.21.1 port is
+alongside it at `~/projects/minecraft/diesel-jetpack-neoforge`. **Neither is in
+a remote — the port is one `rm -rf` from being lost.** Give it a home before
+relying on it.
+
+The port is not a recompile. The parts that had to change:
+
+| Fabric 1.20.1 | NeoForge 1.21.1 |
+|---------------|-----------------|
+| Fabric Transfer API (`Storage<FluidVariant>`, droplets at 81/mB, abortable transactions) | NeoForge capabilities (`Capabilities.FluidHandler.ITEM`, `IFluidHandlerItem`, millibuckets, no transactions) |
+| `ModInitializer` | `@Mod` |
+| `HudRenderCallback` | `RegisterGuiLayersEvent` / `VanillaGuiLayers` |
+| `FabricLoader.getConfigDir()` | `FMLPaths.CONFIGDIR.get()` |
+| Yarn names (`DrawContext`, `Text`, `PlayerEntity`, intermediary `method_31567`) | Mojmap (`GuiGraphics`, `Component`, `Player`, `isBarVisible`) |
+
+Config keys and the file name (`config/diesel_jetpack.json`) were deliberately
+kept identical, so a config carried over from the Fabric instance still applies.
+
+**The one change that would have silently broken it:** on Fabric the fuel drain
+lived in `JetpackItem.onUse(Context)`. On `create_jetpack-forge-5.2.1` that
+overload is a bare bridge to the interface default, and the real work — the
+20-tick gate and the `canAbsorbDamage` call — moved to
+`onUse(Context, FlightAction)`. Injecting into the one-argument form compiles,
+loads, and drains nothing. Verified against the shipped jar with `javap`, and
+again against a booted server with `-Dmixin.debug.export=true`.
+
+Fabric's `CanisterStorageMixin` was dropped rather than ported: the bug it
+worked around is specific to Create: Diesel Generators' Fabric fluid-storage
+implementation. The NeoForge build uses NeoForge's own `FluidHandlerItemStack`
+template, which behaves.
+
+**Verified on a real dedicated server**, not just in a dev run — NeoForge
+21.1.248 with Create, Create Jetpack, Create: Diesel Generators, GeckoLib and
+Kotlin for Forge. This matters because `diesel_jetpack.mixins.json` sets
+`injectors.defaultRequire: 1`: a common mixin that stops matching after an
+upstream update does not degrade, it takes the server down at class load. The
+three client mixins (air gauge, controls display, backtank bar) were checked
+against the shipped jars with `javap` but have not been run in a client.
+
+#### How a local jar ships without an upstream
+
+There is no Modrinth project to point at, so the jar is committed to
+`modpack/local-mods/` and served by the same GitHub Pages site that serves the
+packs. `modpack/` is the site root, so it resolves at
+`<pages-url>/local-mods/diesel-jetpack-1.0.0.jar`, and because it sits outside
+`modpack/neoforge/`, `packwiz refresh` never indexes it — no `.packwizignore`
+needed.
+
+`modpack/neoforge/mods/diesel-jetpack.pw.toml` is hand-written, with a
+`[download]` block and **no `[update]` block**. `packwiz refresh` hashes it like
+any other metafile; `packwiz update --all` skips it because there is no source
+to check. To ship a new build: drop the jar in `modpack/local-mods/`, put its
+`sha512sum` in the `.pw.toml`, and `packwiz refresh`.
+
+Two traps if you add another local mod this way:
+
+- **Give it a `.pw.toml`. Do not drop the jar into `modpack/neoforge/mods/`.**
+  `packwiz refresh` would index it as a raw file, and raw index entries carry
+  only `{file, hash}` — there is no `side` key on them, so the server and every
+  client would download it regardless of what it is.
+- **A new version needs a new filename**, or clients that already have the old
+  jar will keep it alongside the new one.
 
 FTB Library, Quests, and Teams are in the prod client profile but are
 CurseForge-only — reachable with `packwiz curseforge add`, not the Modrinth

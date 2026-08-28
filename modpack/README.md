@@ -93,6 +93,35 @@ A `reason` of `TODO` means nobody has written the rationale down yet. CI reports
 the count but does not fail on it; filling one in is a good thing to do while
 you are touching a mod anyway.
 
+### Mods with no upstream
+
+`modpack/local-mods/` holds jars that packwiz cannot fetch because there is no
+Modrinth or CurseForge project behind them — currently the hand-ported
+`diesel-jetpack-1.0.0.jar`. They are committed here and served by the same
+GitHub Pages site as the packs (`modpack/` is the site root, so the jar resolves
+at `<pages-url>/local-mods/<file>.jar`). The directory sits outside every pack
+directory, so `packwiz refresh` never indexes it.
+
+Each one gets a hand-written `.pw.toml` with a `[download]` block and **no
+`[update]` block** — `refresh` hashes it like any other metafile, and
+`packwiz update --all` leaves it alone because there is nothing to check.
+
+```bash
+cp build/libs/foo-1.2.0.jar modpack/local-mods/
+sha512sum modpack/local-mods/foo-1.2.0.jar
+$EDITOR modpack/neoforge/mods/foo.pw.toml   # name, filename, side, [download]
+(cd modpack/neoforge && packwiz refresh)
+```
+
+**Do not put the jar straight into a pack's `mods/` directory.** `packwiz
+refresh` would index it as a raw file, and raw index entries carry only
+`{file, hash}` — there is no `side` on them, so the server and every client
+would download it whatever it is. And a new build needs a new filename, or
+clients keep the old jar alongside it.
+
+The published URL only exists after a push to `master`, so a freshly added local
+mod 404s for clients until CI has run.
+
 ## Promoting dev to prod
 
 Copy the specific mod files you're promoting, then refresh:
