@@ -1,6 +1,11 @@
 # sdlink's server-side configuration, delivered by the generic pack rather than
 # by packwiz -- packwiz installs mods, not config. See build-client-extras.py.
 #
+# The filename is not ours to choose. CraterLib registers the config under the
+# mod id, so it must be simple-discord-link.toml; a file named anything else
+# sits unread beside the one the mod generates for itself, and sdlink logs
+# "Missing bot token. Mod will be disabled."
+#
 # This file is the source of truth. itzg's generic pack handling records a
 # manifest of everything it applied and deletes those files before re-applying,
 # so whenever this pack changes, the copy on the server volume is replaced by
