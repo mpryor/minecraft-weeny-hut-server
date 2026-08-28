@@ -396,7 +396,7 @@ name = "Simple Discord Link"
 description = "A simple Minecraft -> Discord Chat Link bot with Whitelisting"
 category = ["social", "utility"]
 side = "server"
-reason = "Added 2026-08-28. Bidirectional Minecraft <-> Discord chat relay. Replaces dcintegration, which the prod pack uses but which has no 1.21.1 build (it skips straight from 1.21 to 1.21.3). Needs a bot token in config/simple-discord-link/sdlink.toml on the server volume -- the pack cannot carry it, see NEOFORGE-MIGRATION.md."
+reason = "Added 2026-08-28. Bidirectional Minecraft <-> Discord chat relay. Replaces dcintegration, which the prod pack uses but which has no 1.21.1 build (it skips straight from 1.21 to 1.21.3). The bot token arrives as an ECS secret and is interpolated into config/simple-discord-link/simple-discord-link.toml, which the generic pack ships -- the pack cannot carry the token itself, see NEOFORGE-MIGRATION.md."
 
 [sleep]
 name = "Sleep"
