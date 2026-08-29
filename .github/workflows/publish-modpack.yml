@@ -1,11 +1,28 @@
 name: Publish modpack
 
+# server-config/ and the build script are in the filter because the generic pack
+# is built from them at deploy time. Without them a server-config-only change
+# merges green and never republishes, so it never reaches the server.
+#
+# The two lists are duplicated rather than shared by a YAML anchor: Actions does
+# not expand anchors, and the workflow is silently never triggered if you use one.
+# Keep them identical.
 on:
   push:
     branches: [master]
-    paths: ['modpack/**', 'catalog/**']
+    paths:
+      - 'modpack/**'
+      - 'catalog/**'
+      - 'server-config/**'
+      - 'scripts/build-client-extras.py'
+      - '.github/workflows/publish-modpack.yml'
   pull_request:
-    paths: ['modpack/**', 'catalog/**']
+    paths:
+      - 'modpack/**'
+      - 'catalog/**'
+      - 'server-config/**'
+      - 'scripts/build-client-extras.py'
+      - '.github/workflows/publish-modpack.yml'
   workflow_dispatch:
 
 permissions:
