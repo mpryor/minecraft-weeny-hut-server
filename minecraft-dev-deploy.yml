@@ -10,13 +10,13 @@ parameters:
   SpotPrice: '0.05'
   MaxPlayers: '-1'
   ContainerInsights: disabled
-  YourIPv4: ''
+  YourIPv4: 76.131.113.171
   MinecraftTypeTag: FABRIC
   YourIPv6: ''
   LogGroupName: ''
-  InstanceType: t3.medium
+  InstanceType: t3.large
   ECSAMI: /aws/service/ecs/optimized-ami/amazon-linux-2/recommended/image_id
-  AdminPlayerNames: Hodgeka91
+  AdminPlayerNames: Hodgeka91,trashkw33n,jollyjerr,LANMAN23
   KeyPairName: minecraft
   ServerState: Running
   HostedZoneId: Z0384235218U1Q4GBW6HZ
@@ -32,5 +32,57 @@ parameters:
   S3ProfileName: .profile-dev
   DiscordChannelId: "1298372122812612714"
   MaxMinutesIdle: "20"
-  PackwizUrl: https://mpryor.github.io/minecraft-weeny-hut-server/dev/pack.toml
+  ModrinthProjects: |
+    fabric-api
+    forge-config-api-port
+    animal_feeding_trough
+    appleskin
+    architectury-api
+    ash-api
+    balm
+    carry-on
+    cloth-config
+    clumps
+    create-fabric
+    cristel-lib
+    collective
+    comforts
+    coroutil
+    dcintegration
+    death-finder
+    deeperdarker:vk0DMgtP
+    double-doors
+    fallingtree
+    fabric-language-kotlin
+    ferrite-core
+    flourish
+    ledger
+    lithium
+    lmft
+    memoryleakfix
+    modernfix
+    open-parties-and-claims:beta
+    owo-lib
+    puzzles-lib
+    sleep
+    towns-and-towers
+    trinkets
+    universal-graves
+    unloaded-activity:HBkpQoBq
+    waystones
+    what-are-they-up-to
+    xp-storage
+    xp-storage-trinkets
+    yungs-api
+    yungs-better-desert-temples
+    yungs-better-dungeons
+    yungs-better-end-island
+    yungs-better-jungle-temples
+    yungs-better-mineshafts
+    yungs-better-nether-fortresses
+    yungs-better-ocean-monuments
+    yungs-better-strongholds
+    yungs-better-witch-huts
+    yungs-bridges
+    yungs-extras
 tags: {}
