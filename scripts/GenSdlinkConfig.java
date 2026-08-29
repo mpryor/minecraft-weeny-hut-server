@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Emits sdlink's complete default config with the three values we control replaced by
@@ -56,11 +58,29 @@ public class GenSdlinkConfig {
         cfg.set("botConfig.botToken", "${CFG_SDLINK_BOT_TOKEN}");
         cfg.set("channelsAndWebhooks.serverName", "${CFG_SDLINK_SERVER_NAME}");
         cfg.set("channelsAndWebhooks.channels.chatChannelID", "${CFG_SDLINK_CHAT_CHANNEL_ID}");
+        cfg.set("chat.ignoredCommands", withIgnoredCommand(cfg, "list"));
         cfg.save();
         cfg.close();
 
         verify(out);
         System.out.println("wrote " + out + " at configVersion " + configVer);
+    }
+
+    /**
+     * scripts/autoshutdown polls `rcon-cli list` once a minute to decide whether the
+     * server is idle, and chat.broadcastCommands relays every command that is not on this
+     * list. Without the entry that poll posts "executed command: list" to Discord forever.
+     *
+     * ServerEvents.commandEvent matches with List.contains on the bare command name --
+     * Text.strip(commandString, "/").split(" ")[0] -- so the exact lowercase name is what
+     * belongs here.
+     */
+    private static List<String> withIgnoredCommand(CommentedFileConfig cfg, String command) {
+        List<String> ignored = new ArrayList<>(cfg.<List<String>>get("chat.ignoredCommands"));
+        if (!ignored.contains(command)) {
+            ignored.add(command);
+        }
+        return ignored;
     }
 
     /**
