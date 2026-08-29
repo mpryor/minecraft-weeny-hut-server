@@ -1,0 +1,42 @@
+# sdlink's server-side configuration, delivered by the generic pack rather than by
+# packwiz -- packwiz installs mods, not config. See scripts/build-client-extras.py.
+#
+# GENERATED. Run scripts/gen-sdlink-config.sh to rebuild this from the mod's own
+# defaults after bumping sdlink or CraterLib; do not hand-edit anything below except
+# the values you actually mean to pin.
+#
+# The filename is not ours to choose. CraterLib registers the config under the mod
+# id, so it must be simple-discord-link.toml; a file named anything else sits unread
+# beside the one the mod generates for itself.
+#
+# Why the whole config is checked in, rather than the four lines we care about:
+# CraterLib loads it with ObjectConverter.toObject, which walks the config POJO's
+# fields and assigns config.get(fieldName) to each. A key missing from the file comes
+# back null, and a primitive field then throws -- "Can not set boolean field
+# GeneralConfigSettings.debugging to null value".
+#
+# Why general.configVersion matches sdlink's current version instead of 0: a lower
+# number sends SDLinkConfig.migrateConfig down the upgrade path, whose oldVersion < 21
+# step is
+#
+#     cfg.set("botConfig.botStatus", singletonList(old.get("botConfig.botStatus")))
+#
+# On a file with no botConfig.botStatus that is a list holding one null, and the TOML
+# writer refuses it -- "TOML doesn't support null values" -- after already truncating
+# the file. That is a zero-byte config and a disabled mod. Matching the version means
+# no migration runs now, and a later sdlink that bumps to 38 migrates from 37, where
+# neither that step nor the < 27 one fires.
+#
+# The CFG_ placeholders are substituted inside the container after the pack unpacks
+# and before the server starts (REPLACE_ENV_VARIABLES; values come from the ECS task
+# definition in the terraform repo). Nothing secret is committed here: this pack
+# publishes to GitHub Pages. The bot token arrives as an ECS secret read from SSM
+# Parameter Store at task start, and is never written to this repo, to the pack, or
+# to Terraform state.
+#
+# This file is the source of truth. The generic pack records a manifest of everything
+# it applied and deletes those files before re-applying, so whenever this pack changes
+# the copy on the server volume is replaced by this one. Settings changed in-game or
+# edited on disk do not survive that. sdlink also rewrites the volume's copy on first
+# load to encrypt the token, which is expected and does not affect this file.
+
