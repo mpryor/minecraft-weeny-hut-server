@@ -27,6 +27,12 @@
 # no migration runs now, and a later sdlink that bumps to 38 migrates from 37, where
 # neither that step nor the < 27 one fires.
 #
+# chat.ignoredCommands carries "list" on top of sdlink's defaults. scripts/autoshutdown
+# polls `rcon-cli list` once a minute to decide whether the server is idle, and
+# chat.broadcastCommands relays every command that is not on that list, so without the
+# entry that poll posts "executed command: list" to Discord forever. The override lives
+# in scripts/GenSdlinkConfig.java so regenerating does not drop it.
+#
 # The CFG_ placeholders are substituted inside the container after the pack unpacks
 # and before the server starts (REPLACE_ENV_VARIABLES; values come from the ECS task
 # definition in the terraform repo). Nothing secret is committed here: this pack
