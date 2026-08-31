@@ -106,6 +106,16 @@ hash = "456f66abd180b3f5765473cda5e8acb1a6ea8b15b7ee34442be9a7af414cfc63"
 metafile = true
 
 [[files]]
+file = "mods/create-dragons-plus.pw.toml"
+hash = "80547db2ebfc71d0d649534fe6fee7dabcf2a58770e8ff38218f6db874382204"
+metafile = true
+
+[[files]]
+file = "mods/create-enchantment-industry.pw.toml"
+hash = "9632e3a695f69473d879e285e46007fd5037cb5abc8db02a8bec79689864d0fc"
+metafile = true
+
+[[files]]
 file = "mods/create-jetpack.pw.toml"
 hash = "157b009cd9b2a7f55f2b7d0abdc2f9f7d49eade208a786c71cc6d2f8430bba4a"
 metafile = true
@@ -223,6 +233,11 @@ metafile = true
 [[files]]
 file = "mods/lmft.pw.toml"
 hash = "faed2d9ae09b810b385180a3c20e598ff4d43da75f324b0320649ea4eeb78e29"
+metafile = true
+
+[[files]]
+file = "mods/ly-graves.pw.toml"
+hash = "a62f40c75bcefc80e1705c1669bd7ea9b795c78bf7eca52337dde0701498f547"
 metafile = true
 
 [[files]]

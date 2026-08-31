@@ -167,6 +167,27 @@ category = ["technology"]
 side = "both"
 reason = "Carries over the Create: Diesel Generators content from the prod client profile."
 
+[create-dragons-plus]
+name = "Create: Dragons Plus"
+description = "Provide convenient features to players and dev utilities for Create addon developers."
+category = ["game-mechanics", "utility"]
+side = "both"
+reason = "Required by create-enchantment-industry."
+
+[create-enchantment-industry]
+name = "Create: Enchantment Industry"
+description = "Automatic Enchanting, with Create"
+category = ["storage", "technology"]
+side = "both"
+reason = """Added 2026-08-31. Automates enchanting through Create, and restores the \
+liquid-experience utility the pack lost when `xp-storage` was dropped in the migration \
+-- no NeoForge 1.21.1 build of it exists, so this is the replacement rather than a port. \
+Also ships Apotheosis integration, which pairs with the enchanting overhaul added \
+2026-08-27. PINNED to 2.4.2 (qUpvzZ83), the newest release-channel build for neoforge \
+1.21.1; every 2.5.x is beta. Its Create dependency is unversioned on Modrinth, and no \
+changelog mentions a break against the pinned Create 6.0.10 -- but that is exactly the \
+coupling that bit iris/sodium, so re-check before bumping either."""
+
 [create-jetpack]
 name = "Create Jetpack"
 description = "Upgrade your backtank and utilize the pressurized air to fly"
@@ -327,6 +348,19 @@ description = "Prevents Incorrect Tag Entries from breaking an entire Tag"
 category = ["cursed", "utility"]
 side = "server"
 reason = "Direct carry-over from the prod pack (see NEOFORGE-MIGRATION.md)."
+
+[ly-graves]
+name = "Graves"
+description = "A fully customizable grave to save your loot upon death!"
+category = ["adventure", "equipment", "game-mechanics"]
+side = "both"
+reason = """Added 2026-08-31. Closes the `universal-graves` gap from the migration: \
+nothing in the pack recovered items on death, and `death-finder` only points at where \
+you died -- costly once Apotheosis affix gear is in circulation. Chosen over \
+`gravestone-mod` and `corail-tombstone`, which both declare the client `required`; this \
+one is client `optional` / server `required`, so a client missing the jar still \
+connects. side = "both" follows the pack rule that only `unsupported` flips a side \
+(cf. sleep, fallingtree)."""
 
 [modernfix]
 name = "ModernFix"
