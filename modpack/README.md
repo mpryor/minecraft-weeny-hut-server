@@ -5,20 +5,21 @@ player's client. Managed with [packwiz](https://packwiz.infra.link/).
 
 ```
 modpack/
-  dev/       -> dev.weenyhut.com        Fabric 1.20.1   (Weeny Hut (dev))
-  prod/      -> weenyhut.com            Fabric 1.20.1   (Weeny Hut)
-  neoforge/  -> neoforge.weenyhut.com   NeoForge 1.21.1 (Weeny Hut (neoforge))
+  dev/            -> dev.weenyhut.com            Fabric 1.20.1   (Weeny Hut (dev))
+  prod/           -> weenyhut.com                Fabric 1.20.1   (Weeny Hut)
+  neoforge-dev/   -> neoforge-dev.weenyhut.com   NeoForge 1.21.1 (Weeny Hut (neoforge-dev))
 ```
 
-`dev` and `prod` are the live Fabric line. `neoforge/` is a **migration trial**
-running a different loader and Minecraft version — it is not part of the
-dev -> prod promotion path. See [NEOFORGE-MIGRATION.md](NEOFORGE-MIGRATION.md)
-for what carried over and what didn't.
+`dev` and `prod` are the legacy Fabric line on CloudFormation. `neoforge-dev`
+is the NeoForge line, deployed from
+[minecraft-weeny-hut-terraform](https://github.com/mpryor/minecraft-weeny-hut-terraform).
+[NEOFORGE-MIGRATION.md](NEOFORGE-MIGRATION.md) covers what carried over from the
+Fabric packs and what didn't.
 
 Each directory is a complete, independent pack with its own `pack.toml`,
 `index.toml`, and `mods/`. `pack.toml` carries the Minecraft and loader
-versions, so packs are free to differ — which is exactly how the NeoForge trial
-runs alongside the Fabric pair.
+versions, so packs are free to differ — which is what lets the two lines run
+side by side on different loaders.
 
 ## How syncing works
 
@@ -109,8 +110,8 @@ Each one gets a hand-written `.pw.toml` with a `[download]` block and **no
 ```bash
 cp build/libs/foo-1.2.0.jar modpack/local-mods/
 sha512sum modpack/local-mods/foo-1.2.0.jar
-$EDITOR modpack/neoforge/mods/foo.pw.toml   # name, filename, side, [download]
-(cd modpack/neoforge && packwiz refresh)
+$EDITOR modpack/neoforge-dev/mods/foo.pw.toml   # name, filename, side, [download]
+(cd modpack/neoforge-dev && packwiz refresh)
 ```
 
 **Do not put the jar straight into a pack's `mods/` directory.** `packwiz
@@ -144,21 +145,24 @@ deliberate prod pins — see below.
   mod floated, so it is assumed deliberate — **the reason was never recorded.**
   Confirm before promoting a newer version over it.
 
-## Client-only content (neoforge)
+## Client-only content
 
-`client-extras/neoforge/` holds files served to players but never installed on
-the server -- currently the shader pack. `scripts/build-client-extras.py neoforge`
+`client-extras/<env>/` holds files served to players but never installed on the
+server -- currently the shader pack. `scripts/build-client-extras.py <env>`
 bundles it with every `side = "client"` mod into a zip that the container unpacks
 into AutoModpack's host directory. CI builds it on each publish; the zip is
 gitignored so it cannot drift from the pack.
 
 ```bash
-python3 scripts/build-client-extras.py neoforge   # writes modpack/neoforge-client-extras.zip
+python3 scripts/build-client-extras.py neoforge-dev   # writes modpack/neoforge-dev-client-extras.zip
 ```
 
-Drop a shader or resource pack into `client-extras/neoforge/shaderpacks/` (or
-`resourcepacks/`) and it ships on the next publish. The top-level `config/`
+Drop a shader or resource pack into `client-extras/neoforge-dev/shaderpacks/`
+(or `resourcepacks/`) and it ships on the next publish. The top-level `config/`
 entry the script writes into the zip is load-bearing -- see NEOFORGE-MIGRATION.md.
+
+Only the NeoForge pack has one; the Fabric pair predates the mechanism. The
+`EXTRAS_PACKS` list in `.github/workflows/publish-modpack.yml` is what decides.
 
 ## Applying a published pack to a server
 

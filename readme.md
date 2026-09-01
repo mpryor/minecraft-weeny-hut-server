@@ -89,15 +89,24 @@ pack — one Minecraft instance can only track one pack.
 See [`modpack/README.md`](modpack/README.md) for the full workflow, the
 client/server `side` split, and deliberate version pins.
 
-### NeoForge trial
+### The NeoForge line
 
-`modpack/neoforge/` is a scaffolded migration of the pack to NeoForge 1.21.1,
-deployed separately as `neoforge.weenyhut.com` via
-`minecraft-neoforge-deploy.yml`. It is a trial, not part of the dev -> prod
-path, and the stack does not exist until that config is deployed. 45 of the 52
-mods carried over; see
+`modpack/neoforge-dev/` and `modpack/neoforge-prod/` are the migration of the
+pack to NeoForge 1.21.1, served at `neoforge-dev.weenyhut.com` and
+`neoforge-prod.weenyhut.com`. Both are deployed from
+[minecraft-weeny-hut-terraform](https://github.com/mpryor/minecraft-weeny-hut-terraform),
+one env file each, rather than from CloudFormation --
+`minecraft-neoforge-deploy.yml` is the scaffold that preceded it and was never
+deployed.
+
+`neoforge-dev` follows master. `neoforge-prod` moves only when a promotion pull
+request is merged; see **Promoting to neoforge-prod** in
+[`modpack/README.md`](modpack/README.md).
+
+45 of the 52 Fabric mods carried over; see
 [`modpack/NEOFORGE-MIGRATION.md`](modpack/NEOFORGE-MIGRATION.md) for the gap
-analysis.
+analysis, and its **Porting the prod world** section for how to bring the
+existing prod save across rather than starting fresh.
 
 
 ## Optional Features
