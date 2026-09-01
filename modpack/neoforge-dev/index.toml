@@ -147,7 +147,7 @@ metafile = true
 
 [[files]]
 file = "mods/diesel-jetpack.pw.toml"
-hash = "568d7e0045dc72f99d61ba7c1982003b1c929c2b2ccd2dea5283b00e339225eb"
+hash = "ac79e5ac33af62472e7d3eb840cf658de9e4d54b0c0b0081d9b0ae3d74787607"
 metafile = true
 
 [[files]]
