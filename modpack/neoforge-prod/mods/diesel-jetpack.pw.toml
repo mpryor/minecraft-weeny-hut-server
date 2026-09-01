@@ -3,6 +3,6 @@ filename = "diesel-jetpack-1.0.0.jar"
 side = "both"
 
 [download]
-url = "https://mpryor.github.io/minecraft-weeny-hut-server/local-mods/diesel-jetpack-1.0.0.jar"
+url = "https://pack.weenyhut.com/local-mods/diesel-jetpack-1.0.0.jar"
 hash-format = "sha512"
 hash = "58505a34cfb376e1d44de9917a89545c764a0d24206c097b5ff949313d5315a41535e15a4644f607bd37c96fb6d694797112ac9efdcd733ed766438f3d661b59"
