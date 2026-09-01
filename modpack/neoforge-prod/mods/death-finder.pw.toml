@@ -1,0 +1,13 @@
+name = "Death Finder"
+filename = "DeathFinder-v21.1.1-1.21.1-NeoForge.jar"
+side = "both"
+
+[download]
+url = "https://cdn.modrinth.com/data/wNxIBREV/versions/xhSQ9L1I/DeathFinder-v21.1.1-1.21.1-NeoForge.jar"
+hash-format = "sha512"
+hash = "11a8edc967a6a7a1d11f3e08e10ff97dc7af3bafb89cf8282d25d70acb3e2f57fb10f6b893e9fd5cc88254523376b48ec8dbc0fd609a0ffe25c14fe1db858f47"
+
+[update]
+[update.modrinth]
+mod-id = "wNxIBREV"
+version = "xhSQ9L1I"

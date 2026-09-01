@@ -1,0 +1,160 @@
+name: Promote modpack
+
+# Run by hand, from the Actions tab. Nothing triggers this automatically, and
+# that is the point: neoforge-dev follows master, and neoforge-prod follows a
+# decision.
+#
+# The workflow does not change production. It opens a pull request whose diff is
+# every mod version about to change under production, and merging that pull
+# request is the promotion. Prod picks the new pack up on its next container
+# start -- which, since autoshutdown stops the server when it empties, is the
+# next /mcstart.
+on:
+  workflow_dispatch:
+    inputs:
+      from:
+        description: 'Pack to promote from (the edge)'
+        required: true
+        default: 'neoforge-dev'
+      to:
+        description: 'Pack to promote onto'
+        required: true
+        default: 'neoforge-prod'
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: promote-${{ inputs.to }}
+  cancel-in-progress: false
+
+jobs:
+  promote:
+    runs-on: ubuntu-latest
+    env:
+      FROM: ${{ inputs.from }}
+      TO: ${{ inputs.to }}
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+
+      # Exit 0 means the promoted pack is already a copy of the edge. Opening an
+      # empty pull request would be noise, and worse, would train people to
+      # merge promotion PRs without reading them.
+      - name: Is there anything to promote?
+        id: check
+        run: |
+          if ./scripts/promote-modpack.sh --check "$FROM" "$TO"; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      # Read the two packs before the copy overwrites one of them. This is the
+      # body of the pull request, and it is the only part a reviewer is likely
+      # to read closely, so it names mods rather than files.
+      - name: Summarise what changes
+        if: steps.check.outputs.changed == 'true'
+        run: |
+          python3 - <<'EOF' > /tmp/pr-body.md
+          import os
+          import tomllib
+          from pathlib import Path
+
+          frm, to = os.environ["FROM"], os.environ["TO"]
+
+          def mods(env):
+              d = Path("modpack") / env / "mods"
+              out = {}
+              for f in sorted(d.glob("*.pw.toml")):
+                  with f.open("rb") as fh:
+                      data = tomllib.load(fh)
+                  # `filename` carries the version for every mod source packwiz
+                  # supports, and unlike the update block it is always present.
+                  out[f.name[: -len(".pw.toml")]] = data.get("filename", "?")
+              return out
+
+          old, new = mods(to), mods(frm)
+          added = sorted(new.keys() - old.keys())
+          removed = sorted(old.keys() - new.keys())
+          updated = sorted(k for k in new.keys() & old.keys() if new[k] != old[k])
+
+          print(f"Promotes `{frm}` onto `{to}`.\n")
+          print(f"**{len(added)} added, {len(removed)} removed, "
+                f"{len(updated)} updated.**\n")
+
+          if added:
+              print("### Added\n")
+              for k in added:
+                  print(f"- `{k}` — {new[k]}")
+              print()
+          if removed:
+              print("### Removed\n")
+              for k in removed:
+                  print(f"- `{k}` — was {old[k]}")
+              print()
+          if updated:
+              print("### Updated\n")
+              for k in updated:
+                  print(f"- `{k}`\n  - from `{old[k]}`\n  - to `{new[k]}`")
+              print()
+
+          print("---\n")
+          print(f"`modpack/{to}` is a byte-for-byte copy of `modpack/{frm}` "
+                "apart from the pack's display `name`, which is not covered by "
+                "any hash. Server config, client extras and the catalog travel "
+                "with it.\n")
+          print("Merging this republishes the pack. The server picks it up on "
+                "its next container start — the next `/mcstart` after it idles "
+                "out.")
+          EOF
+          cat /tmp/pr-body.md
+
+      - name: Promote
+        if: steps.check.outputs.changed == 'true'
+        run: ./scripts/promote-modpack.sh "$FROM" "$TO"
+
+      # A pull request opened with GITHUB_TOKEN does not trigger other
+      # workflows, so `Publish modpack` will not run its verify job here. The
+      # promoted pack is a copy of one that already passed it, so the packwiz
+      # hashes cannot have moved -- but the catalog check is pure Python and
+      # costs nothing, so it runs rather than being argued about.
+      #
+      # If master ever requires the `verify` check to pass, this is the reason
+      # promotion PRs will sit unmergeable: swap GITHUB_TOKEN for a PAT, or add
+      # the check to this job.
+      - name: Check the catalog still matches
+        if: steps.check.outputs.changed == 'true'
+        run: python3 scripts/check-catalog.py
+
+      # One branch per promotion target, reused. A second run before the first
+      # is merged updates the open pull request rather than opening a rival one:
+      # there is only ever one pending promotion, and it should be one thing to
+      # review.
+      - name: Open the pull request
+        if: steps.check.outputs.changed == 'true'
+        run: |
+          BRANCH="promote/$FROM-to-$TO"
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -b "$BRANCH"
+          # --force-with-lease needs a remote-tracking ref to lease against, and
+          # a shallow actions/checkout has not fetched this branch. Without the
+          # fetch the push fails on a stale lease the second time it runs.
+          git fetch origin "$BRANCH" || true
+          git add -A -- modpack catalog server-config client-extras
+          git commit -m "chore: promote $FROM to $TO"
+          git push --force-with-lease origin "$BRANCH"
+
+          if gh pr view "$BRANCH" --json state --jq .state 2>/dev/null | grep -qx OPEN; then
+            gh pr edit "$BRANCH" --body-file /tmp/pr-body.md
+            echo "updated the open pull request for $BRANCH"
+          else
+            gh pr create --head "$BRANCH" --base "${GITHUB_REF_NAME}" \
+              --title "chore: promote $FROM to $TO" --body-file /tmp/pr-body.md
+          fi
+
+      - name: Nothing to do
+        if: steps.check.outputs.changed == 'false'
+        run: echo "::notice::$TO already matches $FROM; no pull request opened."

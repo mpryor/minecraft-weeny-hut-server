@@ -1,0 +1,13 @@
+name = "Smart Completion"
+filename = "smartcompletion-1.21-neoforge-2.1.0.jar"
+side = "client"
+
+[download]
+url = "https://cdn.modrinth.com/data/Go1Kxy32/versions/sq7UZs6c/smartcompletion-1.21-neoforge-2.1.0.jar"
+hash-format = "sha512"
+hash = "c0282a01f18c9f973761ca3fdcf5b9d3cbc04651c86815754c02a3b989227d4f05f9512e03f181c76352cc2e7cc9c1716391c6c9f2953dda31e98f099470b048"
+
+[update]
+[update.modrinth]
+mod-id = "Go1Kxy32"
+version = "sq7UZs6c"

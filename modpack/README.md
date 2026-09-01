@@ -8,11 +8,15 @@ modpack/
   dev/            -> dev.weenyhut.com            Fabric 1.20.1   (Weeny Hut (dev))
   prod/           -> weenyhut.com                Fabric 1.20.1   (Weeny Hut)
   neoforge-dev/   -> neoforge-dev.weenyhut.com   NeoForge 1.21.1 (Weeny Hut (neoforge-dev))
+  neoforge-prod/  -> neoforge-prod.weenyhut.com  NeoForge 1.21.1 (Weeny Hut (neoforge-prod))
 ```
 
-`dev` and `prod` are the legacy Fabric line on CloudFormation. `neoforge-dev`
-is the NeoForge line, deployed from
-[minecraft-weeny-hut-terraform](https://github.com/mpryor/minecraft-weeny-hut-terraform).
+Two lines, each with a dev and a prod half. `dev` and `prod` are the legacy
+Fabric line on CloudFormation. `neoforge-dev` and `neoforge-prod` are the
+NeoForge line, deployed from
+[minecraft-weeny-hut-terraform](https://github.com/mpryor/minecraft-weeny-hut-terraform),
+and they are the ones with a promotion path — see
+[Promoting to neoforge-prod](#promoting-to-neoforge-prod) below.
 [NEOFORGE-MIGRATION.md](NEOFORGE-MIGRATION.md) covers what carried over from the
 Fabric packs and what didn't.
 
@@ -161,8 +165,37 @@ Drop a shader or resource pack into `client-extras/neoforge-dev/shaderpacks/`
 (or `resourcepacks/`) and it ships on the next publish. The top-level `config/`
 entry the script writes into the zip is load-bearing -- see NEOFORGE-MIGRATION.md.
 
-Only the NeoForge pack has one; the Fabric pair predates the mechanism. The
+Only the NeoForge packs have one; the Fabric pair predates the mechanism. The
 `EXTRAS_PACKS` list in `.github/workflows/publish-modpack.yml` is what decides.
+
+## Promoting to neoforge-prod
+
+`neoforge-dev` follows master: every merge here republishes it, and the dev
+server picks it up on its next start. `neoforge-prod` follows a decision.
+
+Run the **Promote modpack** workflow from the Actions tab. It copies the edge
+pack, its catalog, its server config and its client extras onto the prod ones
+and opens a pull request:
+
+```bash
+scripts/promote-modpack.sh --check   # would anything change?
+scripts/promote-modpack.sh           # same copy, locally
+```
+
+**That pull request's diff is the list of mod versions about to change under
+production**, which is the whole reason promotion is a copy of files rather
+than a version number in a URL -- a pinned version would put a one-line diff in
+front of the reviewer and hide the part that matters. The pull request body
+summarises it as added / removed / updated mods.
+
+Exactly one field does not travel: the pack's display `name`, so the two are
+distinguishable in a client's modpack list. It is not covered by any hash
+(`pack.toml` hashes `index.toml`, not itself), so the rewrite cannot make
+`packwiz refresh` a non-no-op.
+
+Nothing in the Terraform repo changes on a promotion -- the pack URL is
+constant. Prod picks the new pack up on its next container start, which, since
+autoshutdown stops the server when it empties, is the next `/mcstart`.
 
 ## Applying a published pack to a server
 
