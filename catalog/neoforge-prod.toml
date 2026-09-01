@@ -1,0 +1,619 @@
+# Mod catalog — neoforge
+#
+# Why this file exists: packwiz rewrites mods/*.pw.toml from a Go struct on
+# `packwiz update`, silently discarding comments and unknown keys, so a mod's
+# rationale cannot live inline. This catalog is kept outside the pack directory
+# so packwiz never sees it, and CI enforces that it stays 1:1 with the pack.
+#
+# One [<slug>] table per mods/<slug>.pw.toml in the pack this file is named for.
+#   description - what the mod does (from Modrinth)
+#   category    - Modrinth categories
+#   side        - mirrors the pack's `side` field
+#   reason      - why WE added it. TODO means nobody has written it down yet.
+#
+# Regenerate nothing automatically: edit reasons by hand, they are the point.
+
+[animal_feeding_trough]
+name = "Animal Feeding Trough"
+description = "Mobs self feed with feeding trough"
+category = ["adventure", "mobs", "utility"]
+side = "both"
+reason = "Direct carry-over from the prod pack (see NEOFORGE-MIGRATION.md)."
+
+[apotheosis]
+name = "Apotheosis"
+description = "All things that should have been"
+category = ["adventure", "equipment", "mobs"]
+side = "both"
+reason = "Added 2026-08-27. NeoForge-only overhaul of enchanting, spawners, and gear affixes."
+
+[apothic-attributes]
+name = "Apothic Attributes"
+description = "A library that adds the Attributes GUI, alongside a suite of new attributes to work with"
+category = ["adventure", "equipment", "library"]
+side = "both"
+reason = "Required by apotheosis, apothic-enchanting."
+
+[apothic-enchanting]
+name = "Apothic-Enchanting"
+description = "A huge extension of the Enchanting system"
+category = ["adventure", "equipment", "magic"]
+side = "both"
+reason = "Required by apotheosis."
+
+[apothic-spawners]
+name = "Apothic-Spawners"
+description = "A mod about moving and modifying Mob Spawners"
+category = ["adventure", "game-mechanics", "magic"]
+side = "both"
+reason = "Required by apotheosis."
+
+[appleskin]
+name = "AppleSkin"
+description = "Food/hunger-related HUD improvements"
+category = ["food", "utility"]
+side = "both"
+reason = "Direct carry-over from the prod pack (see NEOFORGE-MIGRATION.md)."
+
+[architectury-api]
+name = "Architectury API"
+description = "An intermediary api aimed to ease developing multiplatform mods."
+category = ["library"]
+side = "both"
+reason = "Required by animal_feeding_trough, rei."
+
+[ars-nouveau]
+name = "Ars Nouveau"
+description = "Craft spells and construct magical automations"
+category = ["magic", "adventure"]
+side = "both"
+reason = "Added 2026-08-27. NeoForge-only magic tech tree; no Fabric equivalent exists."
+
+[ash-api]
+name = "Ash API"
+description = "An abstraction layer between Fabric and NeoForge"
+category = ["library"]
+side = "both"
+reason = "Required by flourish."
+
+[automodpack]
+name = "AutoModpack"
+description = "Enjoy a seamless modpack installation process and effortless updates with a user-friendly solution that simplifies management, making your gaming experience a breeze."
+category = ["management", "social", "utility"]
+side = "both"
+reason = "Distributes the server's mod set to joining clients; replaces the manual Prism pre-launch step."
+
+[balm]
+name = "Balm"
+description = "Abstraction Layer for Multi-Loader Mods"
+category = ["library"]
+side = "both"
+reason = "Required by waystones."
+
+[bookshelf-lib]
+name = "Bookshelf"
+description = "An open source library for other mods!"
+category = ["library", "utility"]
+side = "both"
+reason = "Required by enchantment-descriptions."
+
+[carry-on]
+name = "Carry On"
+description = "Carry On allows you to pick up Tile Entities and Mobs and carry them around!"
+category = ["game-mechanics", "storage", "transportation"]
+side = "both"
+reason = "Direct carry-over from the prod pack (see NEOFORGE-MIGRATION.md)."
+
+[chat-heads]
+name = "Chat Heads"
+description = "See who you're chatting with!"
+category = ["decoration", "social"]
+side = "client"
+reason = "Added 2026-08-27 for client parity with the prod Modrinth profile."
+
+[cloth-config]
+name = "Cloth Config API"
+description = "Configuration Library for Minecraft Mods"
+category = ["library"]
+side = "both"
+reason = "Required by cristel-lib, rei."
+
+[clumps]
+name = "Clumps"
+description = "Clumps XP orbs together to reduce lag"
+category = ["storage", "utility"]
+side = "both"
+reason = "Direct carry-over from the prod pack (see NEOFORGE-MIGRATION.md)."
+
+[collective]
+name = "Collective"
+description = "🎓 Collective is a shared library with common code for all of Serilum's mods."
+category = ["library"]
+side = "both"
+reason = "Required by double-doors."
+
+[comforts]
+name = "Comforts"
+description = "Adds sleeping bags and hammocks for, respectively, portability and turning day to night, without setting new spawns. Comes in 16 different colors!"
+category = ["adventure", "decoration"]
+side = "both"
+reason = "Direct carry-over from the prod pack (see NEOFORGE-MIGRATION.md)."
+
+[coroutil]
+name = "CoroUtil"
+description = "Shared library mod for Corosus's mods"
+category = ["library"]
+side = "both"
+reason = "Required by what-are-they-up-to."
+
+[craterlib]
+name = "CraterLib"
+description = "A Universal Modding API and Utilities library"
+category = ["library"]
+side = "server"
+reason = "Required by sdlink. Scoped to server rather than both because sdlink is its only consumer here and sdlink does not load on clients."
+
+[create]
+name = "Create"
+description = "Aesthetic Technology that empowers the Player"
+category = ["decoration", "technology", "utility"]
+side = "both"
+reason = "Replaces create-fabric; the pack's central tech mod."
+
+[create-diesel-generators]
+name = "Create: Diesel Generators"
+description = "A Create addon that adds compact diesel generators (engines), simple industrial features and crude oil refinery"
+category = ["technology"]
+side = "both"
+reason = "Carries over the Create: Diesel Generators content from the prod client profile."
+
+[create-dragons-plus]
+name = "Create: Dragons Plus"
+description = "Provide convenient features to players and dev utilities for Create addon developers."
+category = ["game-mechanics", "utility"]
+side = "both"
+reason = "Required by create-enchantment-industry."
+
+[create-enchantment-industry]
+name = "Create: Enchantment Industry"
+description = "Automatic Enchanting, with Create"
+category = ["storage", "technology"]
+side = "both"
+reason = """Added 2026-08-31. Automates enchanting through Create, and restores the \
+liquid-experience utility the pack lost when `xp-storage` was dropped in the migration \
+-- no NeoForge 1.21.1 build of it exists, so this is the replacement rather than a port. \
+Also ships Apotheosis integration, which pairs with the enchanting overhaul added \
+2026-08-27. PINNED to 2.4.2 (qUpvzZ83), the newest release-channel build for neoforge \
+1.21.1; every 2.5.x is beta. Its Create dependency is unversioned on Modrinth, and no \
+changelog mentions a break against the pinned Create 6.0.10 -- but that is exactly the \
+coupling that bit iris/sodium, so re-check before bumping either."""
+
+[create-jetpack]
+name = "Create Jetpack"
+description = "Upgrade your backtank and utilize the pressurized air to fly"
+category = ["equipment", "technology"]
+side = "both"
+reason = "Carries over the Create Jetpack content from the prod client profile."
+
+[cristel-lib]
+name = "Cristel Lib"
+description = "A Library mod for easy structure config and runtime datapacks."
+category = ["library", "worldgen"]
+side = "both"
+reason = "Required by towns-and-towers."
+
+[curios]
+name = "Curios API"
+description = "A flexible and expandable accessory/equipment API for users and developers."
+category = ["equipment", "library", "utility"]
+side = "both"
+reason = "Replaces Fabric's Trinkets as the accessory API."
+
+[death-finder]
+name = "Death Finder"
+description = "Deaths happen. Finding your items should not be the hard part."
+category = ["game-mechanics", "utility"]
+side = "both"
+reason = "Direct carry-over from the prod pack (see NEOFORGE-MIGRATION.md)."
+
+[deeperdarker]
+name = "Deeper and Darker"
+description = "A Minecraft mod which features more blocks, items, armors, and hidden mysteries to complement the Deep Dark biome."
+category = ["adventure", "mobs", "worldgen"]
+side = "both"
+reason = "Direct carry-over from the prod pack (see NEOFORGE-MIGRATION.md)."
+
+[diesel-jetpack]
+name = "Diesel Jetpack"
+description = "Makes the Create Jetpack burn diesel from a fluid tank in your inventory instead of backtank air, with a fuel gauge HUD."
+category = ["equipment", "technology"]
+side = "both"
+reason = "Local build with no upstream — hand-ported from the Fabric 1.20.1 original to NeoForge 1.21.1 for this pack. Self-hosted from modpack/local-mods/, so its .pw.toml has no [update] block; see NEOFORGE-MIGRATION.md."
+
+[distanthorizons]
+name = "Distant Horizons"
+description = "Massively increase render distance without harming performance."
+category = ["optimization", "utility"]
+side = "both"
+reason = "Added 2026-08-27 for client parity with the prod Modrinth profile."
+
+[double-doors]
+name = "Double Doors"
+description = "🚪 Multiple identical double doors, trapdoors and fence gates can be opened simultaneously."
+category = ["game-mechanics", "utility"]
+side = "server"
+reason = "Direct carry-over from the prod pack (see NEOFORGE-MIGRATION.md)."
+
+[enchantment-descriptions]
+name = "Enchantment Descriptions"
+description = "Provides a way to get enchantment descriptions from enchanted books."
+category = ["magic", "utility"]
+side = "both"
+reason = "Added 2026-08-27 for client parity with the prod Modrinth profile."
+
+[fallingtree]
+name = "FallingTree"
+description = "Break down your trees by only cutting one piece of it"
+category = ["utility"]
+side = "both"
+reason = "Direct carry-over from the prod pack (see NEOFORGE-MIGRATION.md)."
+
+[ferrite-core]
+name = "FerriteCore"
+description = "Memory usage optimizations"
+category = ["optimization", "utility"]
+side = "both"
+reason = "Direct carry-over from the prod pack (see NEOFORGE-MIGRATION.md)."
+
+[flourish]
+name = "Flourish"
+description = "Use bonemeal to spread small flowers."
+category = ["game-mechanics", "utility"]
+side = "both"
+reason = "Direct carry-over from the prod pack (see NEOFORGE-MIGRATION.md)."
+
+[forge-config-api-port]
+name = "Forge Config API Port"
+description = "NeoForge's & Forge's config systems provided to other modding ecosystems. Designed for a multiloader architecture."
+category = ["library"]
+side = "both"
+reason = "Direct carry-over from the prod pack (see NEOFORGE-MIGRATION.md)."
+
+[freecam]
+name = "Freecam"
+description = "A highly customizable freecam mod."
+category = ["utility"]
+side = "client"
+reason = "Added 2026-08-27 for client parity with the prod Modrinth profile."
+
+[geckolib]
+name = "Geckolib"
+description = "A 3D animation library for entities, blocks, items, armor, and more!"
+category = ["game-mechanics", "library", "utility"]
+side = "both"
+reason = "Added 2026-08-27. Animation library used by several content mods, and required by the custom hollowharvest mod if it is ported."
+
+[inventory-profiles-next]
+name = "Inventory Profiles Next"
+description = "Take control over your inventory. Sort. Move matching Items. Throw all. Locked slots. Gear sets! And much more."
+category = ["storage", "utility"]
+side = "client"
+reason = "Added 2026-08-27 for client parity with the prod Modrinth profile."
+
+[iris]
+name = "Iris Shaders"
+description = "A modern shader pack loader for Minecraft intended to be compatible with existing OptiFine shader packs"
+category = ["decoration", "optimization"]
+side = "client"
+reason = "Added 2026-08-27 for client parity with the prod Modrinth profile."
+
+[jade]
+name = "Jade 🔍"
+description = "Shows information about what you are looking at. (Hwyla/Waila fork for Minecraft 1.16+)"
+category = ["utility"]
+side = "both"
+reason = "Added 2026-08-27 for client parity with the prod Modrinth profile."
+
+[kotlin-for-forge]
+name = "Kotlin for Forge"
+description = "Adds a Kotlin language loader and provides some optional utilities."
+category = ["library"]
+side = "both"
+reason = "Replaces fabric-language-kotlin."
+
+[lambdynamiclights]
+name = "LambDynamicLights - Dynamic Lights"
+description = "Adds dynamic lights to Minecraft as the most feature-complete and optimized dynamic lighting mod."
+category = ["adventure", "decoration", "utility"]
+side = "client"
+reason = "Added 2026-08-27 for client parity with the prod Modrinth profile."
+
+[libipn]
+name = "libIPN"
+description = "Inventory Profiles Next GUI/Config library"
+category = ["library"]
+side = "client"
+reason = "Required by inventory-profiles-next."
+
+[lithium]
+name = "Lithium"
+description = "No-compromises game logic optimization mod, useful for both single-player games and multi-player servers."
+category = ["optimization"]
+side = "both"
+reason = "Direct carry-over from the prod pack (see NEOFORGE-MIGRATION.md)."
+
+[lmft]
+name = "Load My F***ing Tags"
+description = "Prevents Incorrect Tag Entries from breaking an entire Tag"
+category = ["cursed", "utility"]
+side = "server"
+reason = "Direct carry-over from the prod pack (see NEOFORGE-MIGRATION.md)."
+
+[ly-graves]
+name = "Graves"
+description = "A fully customizable grave to save your loot upon death!"
+category = ["adventure", "equipment", "game-mechanics"]
+side = "both"
+reason = """Added 2026-08-31. Closes the `universal-graves` gap from the migration: \
+nothing in the pack recovered items on death, and `death-finder` only points at where \
+you died -- costly once Apotheosis affix gear is in circulation. Chosen over \
+`gravestone-mod` and `corail-tombstone`, which both declare the client `required`; this \
+one is client `optional` / server `required`, so a client missing the jar still \
+connects. side = "both" follows the pack rule that only `unsupported` flips a side \
+(cf. sleep, fallingtree)."""
+
+[modernfix]
+name = "ModernFix"
+description = "All-in-one mod that improves performance, reduces memory usage, and fixes many bugs. Compatible with all your favorite performance mods!"
+category = ["optimization", "utility"]
+side = "both"
+reason = "Direct carry-over from the prod pack (see NEOFORGE-MIGRATION.md)."
+
+[mouse-tweaks]
+name = "Mouse Tweaks"
+description = "Enhances inventory management by adding various functions to the mouse buttons."
+category = ["storage", "utility"]
+side = "client"
+reason = "Added 2026-08-27 for client parity with the prod Modrinth profile."
+
+[open-parties-and-claims]
+name = "Open Parties and Claims"
+description = "Adds the ability to claim chunks and make player parties, integrates with Xaero's Minimap and World Map"
+category = ["library", "utility"]
+side = "both"
+reason = "Direct carry-over from the prod pack (see NEOFORGE-MIGRATION.md)."
+
+[owo-lib]
+name = "oωo (owo-lib)"
+description = "A general utility, GUI and config library for modding on Fabric and Quilt"
+category = ["library"]
+side = "both"
+reason = "Direct carry-over from the prod pack (see NEOFORGE-MIGRATION.md)."
+
+[patchouli]
+name = "Patchouli"
+description = "Accessible, Data-Driven, Dependency-Free Documentation for Minecraft Modders and Pack Makers"
+category = ["library", "utility"]
+side = "both"
+reason = "Required by apotheosis."
+
+[placebo]
+name = "Placebo"
+description = "Placebo is a library used by most of my mods. It does not provide any game-relevant features on its own (save for maybe a couple debug commands)."
+category = ["library"]
+side = "both"
+reason = "Required by apotheosis, apothic-attributes, apothic-enchanting, apothic-spawners."
+
+[prickle]
+name = "Prickle"
+description = "Prickle is a JSON based configuration file format brought to Minecraft."
+category = ["library"]
+side = "both"
+reason = "Required by enchantment-descriptions."
+
+[puzzles-lib]
+name = "Puzzles Lib"
+description = "Why is it called Puzzles? That's the puzzle."
+category = ["library"]
+side = "both"
+reason = "Required by death-finder."
+
+[rei]
+name = "Roughly Enough Items (REI)"
+description = "Clean and Customizable. Alternative to Just Enough Items/JEI."
+category = ["utility"]
+side = "both"
+reason = "Added 2026-08-27 for client parity with the prod Modrinth profile."
+
+[sdlink]
+name = "Simple Discord Link"
+description = "A simple Minecraft -> Discord Chat Link bot with Whitelisting"
+category = ["social", "utility"]
+side = "server"
+reason = "Added 2026-08-28. Bidirectional Minecraft <-> Discord chat relay. Replaces dcintegration, which the prod pack uses but which has no 1.21.1 build (it skips straight from 1.21 to 1.21.3). The bot token arrives as an ECS secret and is interpolated into config/simple-discord-link/simple-discord-link.toml, which the generic pack ships -- the pack cannot carry the token itself, see NEOFORGE-MIGRATION.md. That config is checked in whole and generated by scripts/gen-sdlink-config.sh; a partial one cannot load, and one pinned below sdlink's configVersion truncates itself to zero bytes on the migration path."
+
+[sleep]
+name = "Sleep"
+description = "Change the amount of players to skip the night - Simple way to customize sleep! [sleep warp, displays sleeping players & more]"
+category = ["adventure", "game-mechanics", "social"]
+side = "both"
+reason = "Direct carry-over from the prod pack (see NEOFORGE-MIGRATION.md)."
+
+[smart-completion]
+name = "Smart Completion"
+description = "Better Completion for Minecraft Commands"
+category = ["utility"]
+side = "client"
+reason = """Added 2026-08-27 for client parity with the prod Modrinth profile. \
+PINNED to 1.8.14-beta.1 (KduFYu4t) because it must match Sodium's major line. \
+Sodium 0.8 renamed SodiumGameOptions to SodiumOptions; Iris mixes into that class \
+by name, so 1.8.12 (which targets the 0.6 name) attaches fine at startup and then \
+kills the client on world join with MixinPreProcessorException on \
+SodiumGameOptions$PerformanceSettings::useFogOcclusion. 1.8.14-beta.1 targets the \
+0.8 name. Iris declares versionRange "[0.6,)" on Sodium, so NeoForge does NOT \
+catch the mismatch at load time -- only Modrinth's pinned dependency does, and \
+packwiz does not read it. Bump Iris and Sodium together, or not at all."""
+
+[sodium]
+name = "Sodium"
+description = "A high-performance rendering engine replacement for Minecraft, which greatly improves frame rates and reduces micro-stutter."
+category = ["optimization"]
+side = "client"
+reason = """Required by iris. MUST stay side = "client": Sodium registers a \
+neoforgespi.earlywindow.GraphicsBootstrapper service, which FML invokes from \
+ImmediateWindowHandler.load() during ModLauncher bootstrap — before any Dist \
+filtering runs. On a dedicated server that reaches LWJGL, which is not present, \
+and the server dies with NoClassDefFoundError: org/lwjgl/Version before the mod \
+list is even read. Setting it to "both" crash-looped weenyhut-forge-dev on \
+2026-08-27. Iris's own sodium dependency is side = "CLIENT", so the server does \
+not need it. Players get it through both client paths: packwiz-installer defaults \
+to -s client, and build-client-extras.py ships it to AutoModpack. PINNED to 0.8.12 \
+(S3DUMfBo) -- see [iris] for why the two versions are coupled."""
+
+[sophisticated-backpacks]
+name = "Sophisticated Backpacks"
+description = "Yet another backpack mod this time with backpack you can place in world, color in different color combinations, upgrade with more inventory and enhance with many functional upgrades"
+category = ["storage"]
+side = "both"
+reason = "Added 2026-08-27. NeoForge-only portable storage; near-universal on Forge-lineage servers."
+
+[sophisticated-core]
+name = "Sophisticated Core"
+description = "Library mod for Sophisticated mods"
+category = ["library", "storage"]
+side = "both"
+reason = "Required by sophisticated-backpacks, sophisticated-storage."
+
+[sophisticated-storage]
+name = "Sophisticated Storage"
+description = "Storage mod with multiple tiers and functional upgrades"
+category = ["storage"]
+side = "both"
+reason = "Added 2026-08-27. NeoForge-only storage system; the Fabric pack had no equivalent."
+
+[towns-and-towers]
+name = "Towns and Towers"
+description = "Spice up your world with new villages, pillager outposts, and even new ships!"
+category = ["adventure", "worldgen"]
+side = "both"
+reason = "Direct carry-over from the prod pack (see NEOFORGE-MIGRATION.md)."
+
+[unloaded-activity]
+name = "Unloaded Activity"
+description = "Simulates blocks and entities to catch up after being unloaded for a period of time."
+category = ["game-mechanics", "optimization", "utility"]
+side = "server"
+reason = "Direct carry-over from the prod pack (see NEOFORGE-MIGRATION.md)."
+
+[waystones]
+name = "Waystones"
+description = "Teleport from waystone to waystone or craft magical scrolls to warp."
+category = ["adventure", "magic", "transportation"]
+side = "both"
+reason = "Direct carry-over from the prod pack (see NEOFORGE-MIGRATION.md)."
+
+[what-are-they-up-to]
+name = "What Are They Up To (Watut)"
+description = "Lets you see if players are typing, in a GUI, idle, with cool ingame visuals"
+category = ["social", "utility"]
+side = "both"
+reason = "Direct carry-over from the prod pack (see NEOFORGE-MIGRATION.md)."
+
+[xaeros-minimap]
+name = "Xaero's Minimap"
+description = "Displays a map of the nearby world terrain, players, mobs, entities in the corner of your screen. Lets you create waypoints which help you find the locations you've marked."
+category = ["adventure", "transportation", "utility"]
+side = "both"
+reason = "Added 2026-08-27 for client parity with the prod Modrinth profile."
+
+[xaeros-world-map]
+name = "Xaero's World Map"
+description = "Adds a full screen world map which shows you what you have explored in the world. Works great together with Xaero's Minimap."
+category = ["adventure", "transportation", "utility"]
+side = "both"
+reason = "Added 2026-08-27 for client parity with the prod Modrinth profile."
+
+[yungs-api]
+name = "YUNG's API"
+description = "Library mod for YUNG's mods."
+category = ["library", "worldgen"]
+side = "both"
+reason = "Required by yungs-better-desert-temples, yungs-better-dungeons, yungs-better-end-island, yungs-better-jungle-temples, yungs-better-mineshafts, yungs-better-nether-fortresses, yungs-better-ocean-monuments, yungs-better-strongholds, yungs-better-witch-huts, yungs-bridges, yungs-extras."
+
+[yungs-better-desert-temples]
+name = "YUNG's Better Desert Temples"
+description = "A complete redesign of Minecraft's desert temples!"
+category = ["adventure", "decoration", "worldgen"]
+side = "server"
+reason = "Direct carry-over from the prod pack (see NEOFORGE-MIGRATION.md)."
+
+[yungs-better-dungeons]
+name = "YUNG's Better Dungeons"
+description = "A complete redesign of Minecraft's dungeons!"
+category = ["adventure", "decoration", "worldgen"]
+side = "server"
+reason = "Direct carry-over from the prod pack (see NEOFORGE-MIGRATION.md)."
+
+[yungs-better-end-island]
+name = "YUNG's Better End Island"
+description = "An overhaul of the main End Island where the dragon fight takes place!"
+category = ["adventure", "decoration", "worldgen"]
+side = "server"
+reason = "Direct carry-over from the prod pack (see NEOFORGE-MIGRATION.md)."
+
+[yungs-better-jungle-temples]
+name = "YUNG's Better Jungle Temples"
+description = "A complete redesign of Minecraft's jungle temples!"
+category = ["adventure", "decoration", "worldgen"]
+side = "server"
+reason = "Direct carry-over from the prod pack (see NEOFORGE-MIGRATION.md)."
+
+[yungs-better-mineshafts]
+name = "YUNG's Better Mineshafts"
+description = "A long-awaited and much-needed abandoned mineshaft overhaul!"
+category = ["adventure", "decoration", "worldgen"]
+side = "server"
+reason = "Direct carry-over from the prod pack (see NEOFORGE-MIGRATION.md)."
+
+[yungs-better-nether-fortresses]
+name = "YUNG's Better Nether Fortresses"
+description = "A complete redesign of Minecraft's Nether fortresses!"
+category = ["adventure", "decoration", "worldgen"]
+side = "server"
+reason = "Direct carry-over from the prod pack (see NEOFORGE-MIGRATION.md)."
+
+[yungs-better-ocean-monuments]
+name = "YUNG's Better Ocean Monuments"
+description = "A complete redesign of Minecraft's ocean monuments!"
+category = ["adventure", "decoration", "worldgen"]
+side = "server"
+reason = "Direct carry-over from the prod pack (see NEOFORGE-MIGRATION.md)."
+
+[yungs-better-strongholds]
+name = "YUNG's Better Strongholds"
+description = "A complete redesign of Minecraft's strongholds!"
+category = ["adventure", "decoration", "worldgen"]
+side = "server"
+reason = "Direct carry-over from the prod pack (see NEOFORGE-MIGRATION.md)."
+
+[yungs-better-witch-huts]
+name = "YUNG's Better Witch Huts"
+description = "Adds overhauled witch huts to swamps!"
+category = ["adventure", "decoration", "worldgen"]
+side = "server"
+reason = "Direct carry-over from the prod pack (see NEOFORGE-MIGRATION.md)."
+
+[yungs-bridges]
+name = "YUNG's Bridges"
+description = "Adds beautiful naturally generated bridges throughout the world!"
+category = ["adventure", "decoration", "worldgen"]
+side = "server"
+reason = "Direct carry-over from the prod pack (see NEOFORGE-MIGRATION.md)."
+
+[yungs-extras]
+name = "YUNG's Extras"
+description = "Extra structures, features, and vanilla+ content suitable for any modpack!"
+category = ["adventure", "decoration", "worldgen"]
+side = "server"
+reason = "Direct carry-over from the prod pack (see NEOFORGE-MIGRATION.md)."
+

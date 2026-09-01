@@ -14,7 +14,9 @@ import sys
 import tomllib
 from pathlib import Path
 
-ENVS = ("dev", "prod", "neoforge")
+# Keep in step with PACKS in .github/workflows/publish-modpack.yml. An env
+# missing here is not a failure, it is a pack whose catalog nothing checks.
+ENVS = ("dev", "prod", "neoforge-dev", "neoforge-prod")
 REQUIRED_FIELDS = ("name", "description", "category", "side", "reason")
 
 ROOT = Path(__file__).resolve().parent.parent

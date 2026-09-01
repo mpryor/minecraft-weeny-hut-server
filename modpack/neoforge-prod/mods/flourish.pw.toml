@@ -1,0 +1,13 @@
+name = "Flourish"
+filename = "flourish-neoforge-21.1.0.jar"
+side = "both"
+
+[download]
+url = "https://cdn.modrinth.com/data/nNI4DwbW/versions/NYIrwcSD/flourish-neoforge-21.1.0.jar"
+hash-format = "sha512"
+hash = "7c8c855077e89881b4d1a29ad963252208a54ca19a0ac4b31c28576100a4110c79bc6f1fd7f20f29c831dc3ae37b424243a7d560fc633928f6b0bf2e7f64a170"
+
+[update]
+[update.modrinth]
+mod-id = "nNI4DwbW"
+version = "NYIrwcSD"

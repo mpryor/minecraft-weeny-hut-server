@@ -1,0 +1,13 @@
+name = "Sleep"
+filename = "sleep-v3.3.2.jar"
+side = "both"
+
+[download]
+url = "https://cdn.modrinth.com/data/WTzuSu8P/versions/UWSYEZWj/sleep-v3.3.2.jar"
+hash-format = "sha512"
+hash = "2ca160d49aea3639659c4dfb7c904c0543c36d5cd3cf8a14c1ecc6d8abf9295b1d9d46c5174a580769e4cabb26cdc34d4c59f1e2f84db465d3126906d9bbbdd3"
+
+[update]
+[update.modrinth]
+mod-id = "WTzuSu8P"
+version = "UWSYEZWj"

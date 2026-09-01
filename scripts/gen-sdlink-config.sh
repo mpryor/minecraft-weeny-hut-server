@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# Regenerate server-config/neoforge/simple-discord-link/simple-discord-link.toml
+# Regenerate server-config/neoforge-dev/simple-discord-link/simple-discord-link.toml
 # from sdlink's own defaults. Run this after bumping sdlink or CraterLib.
 #
 # The config has to carry every key sdlink knows about -- see the comment block in
@@ -12,7 +12,7 @@
 set -euo pipefail
 
 repo="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-out="$repo/server-config/neoforge/simple-discord-link/simple-discord-link.toml"
+out="$repo/server-config/neoforge-dev/simple-discord-link/simple-discord-link.toml"
 work="$(mktemp -d)"
 trap 'rm -rf "$work"' EXIT
 
@@ -21,7 +21,7 @@ url_from() {
 }
 
 for mod in sdlink craterlib; do
-    url="$(url_from "$repo/modpack/neoforge/mods/$mod.pw.toml")"
+    url="$(url_from "$repo/modpack/neoforge-dev/mods/$mod.pw.toml")"
     [ -n "$url" ] || { echo "no download url in $mod.pw.toml" >&2; exit 1; }
     echo "fetching $mod: ${url##*/}"
     curl -sSLf -o "$work/$mod.jar" "$url"

@@ -8,6 +8,15 @@ on:
     paths: ['modpack/**', 'catalog/**']
   workflow_dispatch:
 
+env:
+  # Every pack this repo publishes. dev and prod are the Fabric line;
+  # neoforge-dev and neoforge-prod are the NeoForge line, and the -prod half of
+  # it only moves when a promotion is merged (scripts/promote-modpack.sh).
+  PACKS: dev prod neoforge-dev neoforge-prod
+  # The subset that carries client-only content, and so gets a generic pack
+  # built for it. The Fabric packs predate that mechanism.
+  EXTRAS_PACKS: neoforge-dev neoforge-prod
+
 permissions:
   contents: read
   pages: write
@@ -33,14 +42,14 @@ jobs:
         run: go install github.com/packwiz/packwiz@latest
       - name: Check refresh is a no-op
         run: |
-          for env in dev prod neoforge; do
+          for env in $PACKS; do
             (cd "modpack/$env" && packwiz refresh)
           done
           if ! git diff --exit-code -- modpack/; then
             echo "::error::'packwiz refresh' produced changes. Run it locally and commit the result."
             exit 1
           fi
-          echo "All three packs are consistent."
+          echo "All packs are consistent: $PACKS"
 
       # A mod's rationale can't live in its .pw.toml — `packwiz update` rewrites
       # those files from a Go struct and drops comments and unknown keys. The
@@ -59,17 +68,20 @@ jobs:
       # the zip root (see scripts/build-client-extras.py).
       - name: Build client-extras pack
         run: |
-          python3 scripts/build-client-extras.py neoforge -o /tmp/extras.zip
+          for env in $EXTRAS_PACKS; do
+            python3 scripts/build-client-extras.py "$env" -o "/tmp/$env-extras.zip"
+          done
           python3 - <<'EOF'
-          import sys, zipfile
-          names = zipfile.ZipFile("/tmp/extras.zip").namelist()
-          if "config/.generic-pack-anchor" not in names:
-              sys.exit("::error::anchor missing; base would resolve below the zip root")
-          stray = [n for n in names
-                   if not n.startswith(("config/", "automodpack/host-modpack/main/"))]
-          if stray:
-              sys.exit(f"::error::entries outside the host-modpack tree: {stray}")
-          print(f"ok: {len(names)} entries, anchor present")
+          import os, sys, zipfile
+          for env in os.environ["EXTRAS_PACKS"].split():
+              names = zipfile.ZipFile(f"/tmp/{env}-extras.zip").namelist()
+              if "config/.generic-pack-anchor" not in names:
+                  sys.exit(f"::error::{env}: anchor missing; base would resolve below the zip root")
+              stray = [n for n in names
+                       if not n.startswith(("config/", "automodpack/host-modpack/main/"))]
+              if stray:
+                  sys.exit(f"::error::{env}: entries outside the host-modpack tree: {stray}")
+              print(f"ok: {env}, {len(names)} entries, anchor present")
           EOF
 
   deploy:
@@ -90,11 +102,15 @@ jobs:
       # it can never drift from the pack it is derived from.
       - name: Build client-extras generic pack
         run: |
-          python3 scripts/build-client-extras.py neoforge
-          unzip -l modpack/neoforge-client-extras.zip
+          for env in $EXTRAS_PACKS; do
+            python3 scripts/build-client-extras.py "$env"
+            unzip -l "modpack/$env-client-extras.zip"
+          done
 
-      # modpack/ becomes the site root, so the packs resolve at
-      #   <pages-url>/dev/pack.toml  and  <pages-url>/prod/pack.toml
+      # modpack/ becomes the site root, so each pack resolves at
+      #   <pages-url>/<env>/pack.toml
+      # and each generic pack at
+      #   <pages-url>/<env>-client-extras.zip
       - uses: actions/upload-pages-artifact@v3
         with:
           path: modpack
