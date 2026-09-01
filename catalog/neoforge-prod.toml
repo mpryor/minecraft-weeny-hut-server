@@ -5,7 +5,7 @@
 # rationale cannot live inline. This catalog is kept outside the pack directory
 # so packwiz never sees it, and CI enforces that it stays 1:1 with the pack.
 #
-# One [<slug>] table per modpack/neoforge/mods/<slug>.pw.toml.
+# One [<slug>] table per mods/<slug>.pw.toml in the pack this file is named for.
 #   description - what the mod does (from Modrinth)
 #   category    - Modrinth categories
 #   side        - mirrors the pack's `side` field
